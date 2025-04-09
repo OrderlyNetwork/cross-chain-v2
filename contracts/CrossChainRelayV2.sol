@@ -14,7 +14,6 @@ abstract contract OApp is OAppUpgradeable, OAppOptionsType3Upgradeable {
     /// @notice Maps message flow types to their gas limits for cross-chain operations
     mapping(uint8 => LzOption) public lzOptions;
 
-    uint128 constant DEFAULT_GAS_LIMIT = 3000000;
     // 50 slots
     uint256[48] private __gap;
 
@@ -25,6 +24,8 @@ abstract contract OApp is OAppUpgradeable, OAppOptionsType3Upgradeable {
 
     /// @notice Emitted when a pong response is sent
     event Pong();
+
+    uint128 constant DEFAULT_GAS_LIMIT = 3000000;
 
     using OptionsBuilder for bytes;
 
@@ -65,21 +66,10 @@ contract CrossChainRelayDataLayout {
     /// @notice Reverse mapping of LayerZero chain IDs to native chain IDs
     mapping(uint32 => uint256) public eid2ChainId;
 
-    /// @notice Maps chain IDs to their respective cross-chain manager contract addresses
-    /// @dev Deprecated - No longer needed as manager address is stored directly
-    mapping(uint256 => address) public ccManagerMapping;
-
-    /// @notice Maps chain IDs to their respective cross-chain relay contract addresses
-    /// @dev Deprecated - No longer needed as relay addresses are handled by LayerZero
-    mapping(uint256 => address) public ccChainRelayMapping;
-
-    /// @notice The chain ID where this contract is deployed
-    // uint256 public currentChainId;
-
     /// @notice Address of the cross-chain manager (Vault or Ledger) on this chain
     address public ccManagerAddress;
 
-    uint256[43] private __gap;
+    uint256[47] private __gap;
 }
 contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayout {
     using OrderlyCrossChainMessage for OrderlyCrossChainMessage.MessageV1;
@@ -102,7 +92,6 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         address /*_executor*/,
         bytes calldata /*_extraData*/
     ) internal override validNonce(_origin) {
-        // TODO: Implement the logic to receive messages from the LayerZero endpoint
         (OrderlyCrossChainMessage.MessageV1 memory message, bytes memory payload) = OrderlyCrossChainMessage
             .decodeMessageV1AndPayload(_payload);
 
@@ -110,7 +99,6 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     }
 
     function receiveMessage(OrderlyCrossChainMessage.MessageV1 memory message, bytes memory payload) internal {
-        // TODO: Implement the logic to receive messages from the LayerZero endpoint
         emit MessageReceived(message, payload);
         if (message.method == uint8(OrderlyCrossChainMessage.CrossChainMethod.PingPong)) {
             // send pong back;
@@ -133,25 +121,9 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         eid2ChainId[_eid] = _chainId;
     }
 
-    /// @notice Sets the cross-chain manager address
-    /// @dev Deprecated - No longer needed as manager address is stored directly
-    /// @param _chainId The chain ID
-    /// @param _ccManager The cross-chain manager address
-    function addCrossChainManagerMapping(uint256 _chainId, address _ccManager) external onlyOwner {
-        ccManagerMapping[_chainId] = _ccManager;
-    }
-
-    /// @notice Sets the cross-chain relay address
-    /// @dev Deprecated - No longer needed as relay addresses are handled by LayerZero
-    /// @param _chainId The chain ID
-    /// @param _crossChainRelay The cross-chain relay address
-    function addCrossChainRelayMapping(uint256 _chainId, address _crossChainRelay) external onlyOwner {
-        ccChainRelayMapping[_chainId] = _crossChainRelay;
-    }
-
     /// @notice Sets the manager address
     /// @param _address The manager address
-    function setccManagerAddress(address _address) external onlyOwner {
+    function setCCManagerAddress(address _address) external onlyOwner {
         ccManagerAddress = _address;
     }
 
@@ -159,7 +131,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     /// @param _flow The flow ID
     /// @param _lzGas The gas limit
     /// @param _lzValue The value
-    function addFlowGasLimitMapping(uint8 _flow, uint128 _lzGas, uint128 _lzValue) external onlyOwner {
+    function addFlowLzOption(uint8 _flow, uint128 _lzGas, uint128 _lzValue) external onlyOwner {
         lzOptions[_flow] = LzOption({ lzGas: _lzGas, lzValue: _lzValue });
     }
 
@@ -186,18 +158,20 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         OrderlyCrossChainMessage.MessageV1 memory data,
         bytes memory payload
     ) public payable override onlyCCManager {
+        _sendMessage(data, payload);
+    }
+
+    /// @notice Sends a cross-chain message
+    /// @param data The cross-chain meta message
+    /// @param payload The payload
+    function _sendMessage(OrderlyCrossChainMessage.MessageV1 memory data, bytes memory payload) internal {
         bytes memory lzPayload = data.encodeMessageV1AndPayload(payload);
-
         uint32 dstEid = chainId2Eid[data.dstChainId];
-
         require(dstEid != 0, "CrossChainRelay: invalid dst chain id");
-
         uint256 nativeFee = estimateGasFee(data, payload);
-
         bytes memory lzOption = getLzOption(data.method);
 
         _lzSend(dstEid, lzPayload, lzOption, MessagingFee({ nativeFee: nativeFee, lzTokenFee: 0 }), address(this));
-
         emit MessageSent(data, payload);
     }
 
@@ -210,7 +184,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     ) public payable override onlyCCManager {
         uint256 nativeFee = estimateGasFee(data, payload);
         require(msg.value >= nativeFee, "CrossChainRelay: insufficient fee");
-        sendMessage(data, payload);
+        _sendMessage(data, payload);
     }
 
     /// @notice Sends a cross-chain message with fee
@@ -227,7 +201,6 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         require(dstEid != 0, "CrossChainRelay: invalid dst chain id");
 
         uint256 nativeFee = estimateGasFee(data, payload);
-
         bytes memory lzOption = getLzOption(data.method);
 
         require(msg.value >= nativeFee, "CrossChainRelay: insufficient fee");
@@ -236,7 +209,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
             dstEid,
             lzPayload,
             lzOption,
-            MessagingFee({ nativeFee: nativeFee, lzTokenFee: 0 }),
+            MessagingFee({ nativeFee: msg.value, lzTokenFee: 0 }),
             payable(refundReceiver)
         );
         emit MessageSent(data, payload);
@@ -254,7 +227,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
             srcChainId: block.chainid,
             dstChainId: dstChainId
         });
-        sendMessage(data, bytes(""));
+        _sendMessage(data, bytes(""));
     }
 
     /// @notice Tests a function, sends ping to another chain and expects pong back
@@ -269,6 +242,6 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
             srcChainId: block.chainid,
             dstChainId: dstChainId
         });
-        sendMessage(data, bytes(""));
+        _sendMessage(data, bytes(""));
     }
 }

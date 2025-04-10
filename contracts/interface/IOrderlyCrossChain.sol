@@ -2,6 +2,7 @@
 pragma solidity ^0.8.4;
 
 import "../utils/OrderlyCrossChainMessage.sol";
+import { MessagingReceipt, Origin } from "../layerzero/oapp/OAppUpgradeable.sol";
 
 struct LzOption {
     uint128 lzGas;
@@ -11,10 +12,10 @@ struct LzOption {
 // Interface for the Cross Chain Operations
 interface IOrderlyCrossChain {
     // Event to be emitted when a message is sent
-    event MessageSent(OrderlyCrossChainMessage.MessageV1 message, bytes payload);
+    event MessageSent(MessagingReceipt receipt);
 
     // Event to be emitted when a message is received
-    event MessageReceived(OrderlyCrossChainMessage.MessageV1 message, bytes payload);
+    event MessageReceived(Origin origin, bytes32 guid);
 
     /// @notice estimate gas fee
     /// @param data message data
@@ -48,7 +49,7 @@ interface IOrderlyCrossChain {
     ) external payable;
 }
 
-// Interface for the Cross Chain Receiver
+// Interface for the Cross Chain Receiver (ccManager)
 interface IOrderlyCrossChainReceiver {
     /// @notice receive message from relay, relay will call this function to send messages
     /// @param message message

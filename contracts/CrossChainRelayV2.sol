@@ -148,7 +148,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     /// @param _guid The guid of the message
     function _lzReceive(
         Origin calldata _origin,
-        bytes32 /*_guid*/,
+        bytes32 _guid,
         bytes calldata _payload,
         address /*_executor*/,
         bytes calldata /*_extraData*/
@@ -156,7 +156,8 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         (OrderlyCrossChainMessage.MessageV1 memory message, bytes memory payload) = OrderlyCrossChainMessage
             .decodeMessageV1AndPayload(_payload);
 
-        receiveMessage(message, payload);
+        _receiveMessage(message, payload);
+        emit MessageReceived(_origin, _guid);
     }
 
     /// @notice Internal function to receive messages from LayerZero
@@ -281,7 +282,6 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
             MessagingFee({ nativeFee: nativeFee, lzTokenFee: 0 }),
             refundReceiver
         );
-        emit MessageSent(data, payload);
     }
 
     /// @notice Tests a function, sends ping to another chain

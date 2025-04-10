@@ -221,21 +221,9 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         OrderlyCrossChainMessage.MessageV1 memory data,
         bytes memory payload
     ) public payable override onlyCCManager {
-        _sendMessage(data, payload);
-    }
-
-    /// @notice Sends a cross-chain message
-    /// @param data The cross-chain meta message
-    /// @param payload The payload
-    function _sendMessage(OrderlyCrossChainMessage.MessageV1 memory data, bytes memory payload) internal {
-        bytes memory lzPayload = data.encodeMessageV1AndPayload(payload);
-        uint32 dstEid = chainId2Eid[data.dstChainId];
-        require(dstEid != 0, "CrossChainRelay: invalid dst chain id");
         uint256 nativeFee = estimateGasFee(data, payload);
-        bytes memory lzOption = getLzOption(data.method);
-
-        _lzSend(dstEid, lzPayload, lzOption, MessagingFee({ nativeFee: nativeFee, lzTokenFee: 0 }), address(this));
-        emit MessageSent(data, payload);
+        MessagingReceipt memory receipt = _sendMessage(nativeFee, address(this), data, payload);
+        emit MessageSent(receipt);
     }
 
     /// @notice Sends a cross-chain message with fee
@@ -247,7 +235,8 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     ) public payable override onlyCCManager {
         uint256 nativeFee = estimateGasFee(data, payload);
         require(msg.value >= nativeFee, "CrossChainRelay: insufficient fee");
-        _sendMessage(data, payload);
+        MessagingReceipt memory receipt = _sendMessage(nativeFee, address(this), data, payload);
+        emit MessageSent(receipt);
     }
 
     /// @notice Sends a cross-chain message with fee
@@ -259,21 +248,38 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         OrderlyCrossChainMessage.MessageV1 memory data,
         bytes memory payload
     ) public payable override onlyCCManager {
-        bytes memory lzPayload = data.encodeMessageV1AndPayload(payload);
         uint32 dstEid = chainId2Eid[data.dstChainId];
         require(dstEid != 0, "CrossChainRelay: invalid dst chain id");
 
         uint256 nativeFee = estimateGasFee(data, payload);
-        bytes memory lzOption = getLzOption(data.method);
-
         require(msg.value >= nativeFee, "CrossChainRelay: insufficient fee");
 
-        _lzSend(
+        MessagingReceipt memory receipt = _sendMessage(nativeFee, payable(refundReceiver), data, payload);
+
+        emit MessageSent(receipt);
+    }
+
+    /// @notice Sends a cross-chain message
+    /// @param data The cross-chain meta data
+    /// @param payload The payload of the cc message
+    function _sendMessage(
+        uint256 nativeFee,
+        address refundReceiver,
+        OrderlyCrossChainMessage.MessageV1 memory data,
+        bytes memory payload
+    ) internal returns (MessagingReceipt memory receipt) {
+        uint32 dstEid = chainId2Eid[data.dstChainId];
+        require(dstEid != 0, "CrossChainRelay: invalid dst chain id");
+
+        bytes memory lzPayload = data.encodeMessageV1AndPayload(payload);
+        bytes memory lzOption = getLzOption(data.method);
+
+        receipt = _lzSend(
             dstEid,
             lzPayload,
             lzOption,
-            MessagingFee({ nativeFee: msg.value, lzTokenFee: 0 }),
-            payable(refundReceiver)
+            MessagingFee({ nativeFee: nativeFee, lzTokenFee: 0 }),
+            refundReceiver
         );
         emit MessageSent(data, payload);
     }
@@ -290,7 +296,9 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
             srcChainId: block.chainid,
             dstChainId: dstChainId
         });
-        _sendMessage(data, bytes(""));
+        uint256 nativeFee = estimateGasFee(data, bytes(""));
+        MessagingReceipt memory receipt = _sendMessage(nativeFee, address(this), data, bytes(""));
+        emit MessageSent(receipt);
     }
 
     /// @notice Tests a function, sends ping to another chain and expects pong back

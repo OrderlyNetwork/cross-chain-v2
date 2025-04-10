@@ -101,7 +101,7 @@ contract CrossChainRelayDataLayoutV2 {
     mapping(uint32 => uint256) public eid2ChainId;
 
     /// @notice Address of the cross-chain manager (Vault or Ledger) on this chain
-    address public ccManagerAddress;
+    address public ccManager;
 
     /// @notice Gap to prevent storage collisions
     /// @dev This is used to prevent storage collisions
@@ -301,6 +301,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         emit MessageSent(receipt);
     }
 
+    // ================================ ONLY OWNER FUNCTIONS ================================
     /// @notice Tests a function, sends ping to another chain and expects pong back
     /// @param dstChainId The destination chain ID
     function pingPong(uint256 dstChainId) external onlyOwner {
@@ -313,6 +314,25 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
             srcChainId: block.chainid,
             dstChainId: dstChainId
         });
-        _sendMessage(data, bytes(""));
+        uint256 nativeFee = estimateGasFee(data, bytes(""));
+        MessagingReceipt memory receipt = _sendMessage(nativeFee, address(this), data, bytes(""));
+        emit MessageSent(receipt);
+    }
+
+    /// @notice Withdraws native tokens from the contract
+    /// @param to Recipient address
+    /// @param amount Amount of native tokens to withdraw
+    function withdrawNativeToken(address payable to, uint256 amount) external onlyOwner {
+        require(address(this).balance >= amount, "Insufficient balance");
+        (bool success, ) = to.call{ value: amount }("");
+        require(success, "Transfer failed");
+    }
+
+    /// @notice Withdraws ERC20 tokens from the contract
+    /// @param token Token address
+    /// @param to Recipient address
+    /// @param amount Amount of tokens to withdraw
+    function withdrawToken(address token, address to, uint256 amount) external onlyOwner {
+        IERC20(token).transfer(to, amount);
     }
 }

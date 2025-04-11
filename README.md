@@ -7,7 +7,7 @@ The Orderly Cross-Chain Relay V2 is an OApp based on LayerZero V2, and used to c
 To migrate from the previous version, we need to:
 
 1. Deploy the new CrossChainRelayV2 contract on both Ledger and Vault chains.
-2. Upgrade the CCManager contracts on both Ledger and Vault chains.
+2. Upgrade the [CCManager contracts](https://gitlab.com/orderlynetwork/orderly-v2/evm-cross-chain/-/tree/dev) on both Ledger and Vault chains.
 3. Set Cross-Chain option on the CCManager contracts to enable the Relay V2.
 4. Relay message through the new CrossChainRelayV2 contract.
 

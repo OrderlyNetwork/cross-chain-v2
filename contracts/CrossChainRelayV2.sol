@@ -138,6 +138,10 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         _;
     }
 
+    function initialize(address _lzEndpoint, address _delegate) external override initializer {
+        __initializeOApp(_lzEndpoint, _delegate);
+    }
+
     /// @notice Internal function to receive messages from LayerZero
     /// @param _origin The origin of the message
     /// @dev The origin contains the following:

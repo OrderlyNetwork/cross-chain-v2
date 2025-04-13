@@ -34,6 +34,10 @@ Note: To backward compatible for the inflight messages through the relay V1, we 
 
 ## Deploy
 
+To keep the Relay V2 contracts same address on all chains, we need to deploy the contracts via a factory contract using `Creat3` library from [solady](https://github.com/Vectorized/solady/blob/main/src/utils/CREATE3.sol).
+
+The factory contract itself is deployed via another [deterministic factory](https://github.com/Arachnid/deterministic-deployment-proxy) contract `0x4e59b44847b379578588920ca78fbf26c0b4956c`
+
 TODO @Zion
 
 ## Set Configuration

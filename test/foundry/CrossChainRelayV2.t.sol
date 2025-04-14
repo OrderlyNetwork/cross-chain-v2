@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import { CrossChainRelayV2, IOrderlyCrossChainReceiver } from "../../contracts/CrossChainRelayV2.sol";
-import { ContractFactory } from "../../contracts/ContractFactory.sol";
+import { ContractFactory } from "./ContractFactory.sol";
 import { OrderlyCrossChainMessage } from "../../contracts/utils/OrderlyCrossChainMessage.sol";
 
 import { IOAppOptionsType3, EnforcedOptionParam } from "../../contracts/layerzero/oapp/libs/OAppOptionsType3Upgradeable.sol";

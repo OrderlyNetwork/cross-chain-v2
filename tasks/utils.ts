@@ -8,6 +8,22 @@ export function checkEnv(env: string) {
     throw new Error(`Invalid environment: ${env}, must be one of ${constants.ENVS.join(', ')}`)
 }
 
+export function checkNetwork(env: string, network: string) {
+    if (env === 'mainnet') {
+        if (constants.MAIN_NETWORKS.includes(network)) {
+            return network
+        } else {
+            throw new Error(`Invalid network: ${network}, must be one of ${constants.MAIN_NETWORKS.join(', ')}`)
+        }
+    } else {
+        if (constants.TEST_NETWORKS.includes(network)) {
+            return network
+        } else {
+            throw new Error(`Invalid network: ${network}, must be one of ${constants.TEST_NETWORKS.join(', ')}`)
+        }
+    }
+}
+
 export function checkContractType(contractType: string) {
     if (constants.CONTRACT_TYPES.includes(contractType)) {
         return contractType
@@ -36,6 +52,10 @@ export function getMultisigAddress(env: string, chain: string) {
     return constants.MULTISIG_ADDRESSES[env]
 }
 
+export function getCCRelayV2Address(env: string) {
+    return constants.CC_RELAY_V2_ADDRESSES[env]
+}
+
 export function getFactoryAddress(env: string) {
     return constants.FACTORY_ADDRESSES[env]
 }
@@ -45,6 +65,28 @@ export function getEndpoint(env: string) {
         return constants.MAINNET_ENDPOINT
     }
     return constants.TESTNET_ENDPOINT
+}
+
+export function getNetworks(env: string) {
+    if (env === 'mainnet') {
+        return constants.MAIN_NETWORKS
+    }
+    return constants.TEST_NETWORKS
+}
+
+export function isOrderlyNetwork(network: string) {
+    return network === 'orderly' || network === 'orderlysepolia'
+}
+
+export function getOrderlyNetwork(env: string) {
+    if (env === 'mainnet') {
+        return constants.ORDERLY_MAINNET
+    }
+    return constants.ORDERLY_TESTNET
+}
+
+export function getLzConfig(network: string) {
+    return constants.LZ_CONFIGS[network]
 }
 
 

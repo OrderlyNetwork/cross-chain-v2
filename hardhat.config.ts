@@ -13,6 +13,8 @@ import { HardhatUserConfig, HttpNetworkAccountsUserConfig } from 'hardhat/types'
 
 import { EndpointId } from '@layerzerolabs/lz-definitions'
 
+import "./tasks/tasks"
+
 // Set your preferred authentication method
 //
 // If you prefer using a mnemonic, set a MNEMONIC environment variable
@@ -54,25 +56,103 @@ const config: HardhatUserConfig = {
         ],
     },
     networks: {
-        'optimism-testnet': {
-            eid: EndpointId.OPTSEP_V2_TESTNET,
-            url: process.env.RPC_URL_OP_SEPOLIA || 'https://optimism-sepolia.gateway.tenderly.co',
+        
+        sepolia: {
+            eid: EndpointId.SEPOLIA_V2_TESTNET,
+            url: process.env.SEPOLIA_RPC_URL,
             accounts,
         },
-        'avalanche-testnet': {
-            eid: EndpointId.AVALANCHE_V2_TESTNET,
-            url: process.env.RPC_URL_FUJI || 'https://avalanche-fuji.drpc.org',
-            accounts,
-        },
-        'arbitrum-testnet': {
+        arbitrumsepolia: {
             eid: EndpointId.ARBSEP_V2_TESTNET,
-            url: process.env.RPC_URL_ARB_SEPOLIA || 'https://arbitrum-sepolia.gateway.tenderly.co',
+            url: process.env.ARBITRUMSEPOLIA_RPC_URL,
             accounts,
         },
-        hardhat: {
-            // Need this for testing because TestHelperOz5.sol is exceeding the compiled contract size limit
-            allowUnlimitedContractSize: true,
+        opsepolia: {
+            eid: EndpointId.OPTSEP_V2_TESTNET,
+            url: process.env.OPSEPOLIA_RPC_URL,
+            accounts,
         },
+        amoy: {
+            eid: EndpointId.AMOY_V2_TESTNET,
+            url: process.env.AMOYSEPOLIA_RPC_URL,
+            accounts,
+          },
+        mantlesepolia: {
+            eid: EndpointId.MANTLESEP_V2_TESTNET,
+            url: process.env.MANTLESEPOLIA_RPC_URL,
+            accounts,
+        },
+        basesepolia: {
+            eid: EndpointId.BASESEP_V2_TESTNET,
+            url: process.env.BASESEPOLIA_RPC_URL,
+            accounts,
+        },
+        fuji: {
+            eid: EndpointId.AVALANCHE_V2_TESTNET,
+            url: process.env.FUJI_RPC_URL,
+            accounts,
+        },
+        bsctestnet: {
+            eid: EndpointId.BSC_V2_TESTNET,
+            url: process.env.BSCTESTNET_RPC_URL,
+            accounts,
+        },
+        orderlysepolia: {
+            eid: EndpointId.ORDERLY_V2_TESTNET,
+            url: process.env.ORDERLYSEPOLIA_RPC_URL,
+            accounts,
+        },
+        // mainnets
+        ethereum: {
+            eid: EndpointId.ETHEREUM_MAINNET,
+            url: process.env.ETHEREUM_RPC_URL,
+            accounts,
+        },
+        arbitrum: {
+            eid: EndpointId.ARBITRUM_MAINNET,
+            url: process.env.ARBITRUM_RPC_URL,
+            accounts,
+        },
+        optimism: {
+            eid: EndpointId.OPTIMISM_MAINNET,
+            url: process.env.OPTIMISM_RPC_URL,
+            accounts,
+        },
+        polygon: {
+            eid: EndpointId.POLYGON_MAINNET,
+            url: process.env.POLYGON_RPC_URL,
+            accounts,
+        },
+        base: {
+            eid: EndpointId.BASE_MAINNET,
+            url: process.env.BASE_RPC_URL,
+            accounts,
+        },
+        mantle: {
+            eid: EndpointId.MANTLE_MAINNET,
+            url: process.env.MANTLE_RPC_URL,
+            accounts,
+        },
+        avax: {
+            eid: EndpointId.AVALANCHE_MAINNET,
+            url: process.env.AVAX_RPC_URL,
+            accounts,
+        },
+        snowtrace: {
+            eid: EndpointId.AVALANCHE_MAINNET,
+            url: 'https://api.avax-test.network/ext/bc/C/rpc',
+            accounts,
+          },
+        bsc: {
+            eid: EndpointId.BSC_V2_MAINNET,
+            url: process.env.BSC_RPC_URL,
+            accounts,
+        },
+        orderly: {
+            eid: EndpointId.ORDERLY_MAINNET,
+            url: process.env.ORDERLY_RPC_URL,
+            accounts,
+        }
     },
     namedAccounts: {
         deployer: {

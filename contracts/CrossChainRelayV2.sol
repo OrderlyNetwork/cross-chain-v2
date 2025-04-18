@@ -165,7 +165,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         bytes calldata _payload,
         address /*_executor*/,
         bytes calldata /*_extraData*/
-    ) internal override validNonce(_origin) {
+    ) internal override whenNotPaused validNonce(_origin) {
         (OrderlyCrossChainMessage.MessageV1 memory message, bytes memory payload) = OrderlyCrossChainMessage
             .decodeMessageV1AndPayload(_payload);
 
@@ -286,7 +286,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         address refundReceiver,
         OrderlyCrossChainMessage.MessageV1 memory data,
         bytes memory payload
-    ) internal returns (MessagingReceipt memory receipt) {
+    ) internal whenNotPaused returns (MessagingReceipt memory receipt) {
         uint32 dstEid = chainId2Eid[data.dstChainId];
         require(dstEid != 0, "CrossChainRelay: invalid dst chain id");
 

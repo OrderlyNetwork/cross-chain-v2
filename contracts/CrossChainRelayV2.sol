@@ -8,6 +8,7 @@ import { OptionsBuilder } from "./layerzero/oapp/libs/OptionsBuilder.sol";
 import { IOrderlyCrossChain, LzOption, IOrderlyCrossChainReceiver } from "./interface/IOrderlyCrossChain.sol";
 import { OrderlyCrossChainMessage } from "./utils/OrderlyCrossChainMessage.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 /// @notice OApp contract component for CrossChainRelayV2
 /// @dev Seperate the OApp part from the CrossChainRelayV2
 abstract contract OApp is OAppUpgradeable, OAppOptionsType3Upgradeable {
@@ -126,6 +127,7 @@ contract CrossChainRelayDataLayoutV2 {
 contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayoutV2 {
     /// @notice OrderlyCrossChainMessage library for the CrossChainRelayV2
     using OrderlyCrossChainMessage for OrderlyCrossChainMessage.MessageV1;
+    using SafeERC20 for IERC20;
 
     /// @notice Modifier to check if the nonce is valid
     /// @param _origin The origin of the message
@@ -351,6 +353,6 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     /// @param to Recipient address
     /// @param amount Amount of tokens to withdraw
     function withdrawToken(address token, address to, uint256 amount) external onlyOwner {
-        IERC20(token).transfer(to, amount);
+        IERC20(token).safeTransfer(to, amount);
     }
 }

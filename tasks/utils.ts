@@ -125,6 +125,30 @@ export async function getOrderlyAddresses(env: string) {
     return orderlyAddresses
 }
 
+export const PROPOSAL_FOLDER = path.join(__dirname, '../../safe-tasks/txn/CrossChain/')
+export async function writeProposal(folderPath: string, proposal: any, proposalName: string) {
+    if (!fs.existsSync(folderPath)) {
+        throw new Error(`Folder ${folderPath} does not exist`)
+      }
+      const files = fs.readdirSync(folderPath);
+
+    const regex = /^N(\d{4})_.*\.json$/;
+    const numbers = files
+    .map(file => {
+    const match = file.match(regex);
+    return match ? parseInt(match[1], 10) : null;
+    })
+    .filter(num => num !== null) as number[];
+
+    const maxNum = numbers.length > 0 ? Math.max(...numbers) : 0;
+    const newNum = maxNum + 1;
+    const prefix = `N` + newNum.toString().padStart(4, '0') + `_`
+
+      const fullPath = path.join(folderPath, prefix + proposalName);
+      fs.writeFileSync(fullPath, JSON.stringify(proposal, null, 2), 'utf-8');
+    
+}
+
 
 
 

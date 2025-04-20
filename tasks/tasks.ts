@@ -107,6 +107,7 @@ task("order:relayv2:setconfig", "Set the config of CrossChainRelayV2")
 
 task("order:manager:upgrade", "Generate the proposal to upgrade the CCManager and set config")
     .addParam("env", "The environment to upgrade the CCManager", undefined, types.string)
+    .addFlag("writeProposal", "Write the proposal to the safe tasks folder")
     .setAction(async (args, hre) => {
         const {env} = args
         utils.checkEnv(env)
@@ -155,10 +156,16 @@ task("order:manager:upgrade", "Generate the proposal to upgrade the CCManager an
         
         const proposals = [proposalUpgrade, proposalSetRelayV1Status, proposalSetRelayV2Address, proposalSetRelayV2Status]
         console.log(JSON.stringify(proposals, null, 2))
+        const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'UPGRADE_CCMANAGER'.toUpperCase()}.json`
+        if (args.writeProposal) {
+            await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
+            console.log(`✅ Written proposal to upgrade CCManager to ${utils.PROPOSAL_FOLDER}`)
+        }
     })
 
 task("order:manager:relayoption", "Propose to enable CrossChainRelayV2 as the default relay")
     .addParam("env", "The environment to set CrossChainRelayV2 as the default relay", undefined, types.string)
+    .addFlag("writeProposal", "Write the proposal to the safe tasks folder")
     .setAction(async (args, hre) => {
         const {env} = args
         utils.checkEnv(env)
@@ -205,7 +212,13 @@ task("order:manager:relayoption", "Propose to enable CrossChainRelayV2 as the de
             }
             
         }
-        console.log(JSON.stringify(proposals, null, 2))  
+        console.log(JSON.stringify(proposals, null, 2)) 
+
+        const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'SET_RELAY_OPTION'.toUpperCase()}.json`
+        if (args.writeProposal) {
+            await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
+            console.log(`✅ Written proposal to upgrade CCManager to ${utils.PROPOSAL_FOLDER}`)
+        }
     })
 
 // Deploy the CrossChainRelayV2 contract implementation

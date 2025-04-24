@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 import { CrossChainRelayV2, IOrderlyCrossChainReceiver } from "../../contracts/CrossChainRelayV2.sol";
+import { PausableUpgradeable } from "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import { ContractFactory } from "./ContractFactory.sol";
 import { OrderlyCrossChainMessage } from "../../contracts/utils/OrderlyCrossChainMessage.sol";
 
@@ -153,6 +154,15 @@ contract CrossChainRelayV2Test is TestHelperOz5 {
 
     function test_pingpong() public {
         vm.startPrank(delegate);
+        orderlyRelay.pingPong(arbChainId);
+        vm.stopPrank();
+    }
+
+    function test_pause() public {
+        vm.startPrank(delegate);
+        // orderlyRelay paused and try to send message
+        orderlyRelay.pause();
+        vm.expectRevert(PausableUpgradeable.EnforcedPause.selector);
         orderlyRelay.pingPong(arbChainId);
         vm.stopPrank();
     }

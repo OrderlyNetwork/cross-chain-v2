@@ -8,6 +8,7 @@ import { OptionsBuilder } from "./layerzero/oapp/libs/OptionsBuilder.sol";
 import { IOrderlyCrossChain, LzOption, IOrderlyCrossChainReceiver } from "./interface/IOrderlyCrossChain.sol";
 import { OrderlyCrossChainMessage } from "./utils/OrderlyCrossChainMessage.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 /// @notice OApp contract component for CrossChainRelayV2
 /// @dev Seperate the OApp part from the CrossChainRelayV2
 abstract contract OApp is OAppUpgradeable, OAppOptionsType3Upgradeable {
@@ -27,18 +28,27 @@ abstract contract OApp is OAppUpgradeable, OAppOptionsType3Upgradeable {
     /// @dev The above used slots + the rest of the slots are 50 (2 + 48)
     uint256[48] private __gap;
 
-    event MsgReceived(uint8 method);
-
     /// @notice Emitted when a ping message is received
     event Ping();
 
     /// @notice Emitted when a pong response is sent
     event Pong();
 
-    /// @notice Emitted when a message is received
-    /// @param _origin The origin of the message
-    /// @param _guid The guid of the message
-    event ReceiveMesage(Origin _origin, bytes32 _guid);
+    /// @notice Emitted when a chain ID mapping is added
+    /// @param _chainId The chain ID
+    /// @param _eid The LayerZero EID
+    event ChainIdAdded(uint256 _chainId, uint32 _eid);
+
+    /// @notice Emitted when the CC manager is set
+    /// @param _oldCCManager The old CC manager address
+    /// @param _newCCManager The new CC manager address
+    event CCManagerSet(address _oldCCManager, address _newCCManager);
+
+    /// @notice Emitted when the method option is set
+    /// @param _method The method
+    /// @param _lzGas The gas limit for the transaction execution on the dst chain
+    /// @param _lzValue The value to airdrop on the dst chain
+    event MethodOptionSet(uint8 _method, uint128 _lzGas, uint128 _lzValue);
 
     /// @notice Default gas limit for cross-chain operations
     /// @dev This is used to set the default gas limit for cross-chain operations
@@ -117,6 +127,7 @@ contract CrossChainRelayDataLayoutV2 {
 contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayoutV2 {
     /// @notice OrderlyCrossChainMessage library for the CrossChainRelayV2
     using OrderlyCrossChainMessage for OrderlyCrossChainMessage.MessageV1;
+    using SafeERC20 for IERC20;
 
     /// @notice Modifier to check if the nonce is valid
     /// @param _origin The origin of the message
@@ -156,7 +167,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         bytes calldata _payload,
         address /*_executor*/,
         bytes calldata /*_extraData*/
-    ) internal override validNonce(_origin) {
+    ) internal override whenNotPaused validNonce(_origin) {
         (OrderlyCrossChainMessage.MessageV1 memory message, bytes memory payload) = OrderlyCrossChainMessage
             .decodeMessageV1AndPayload(_payload);
 
@@ -188,12 +199,16 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     function addChainIdMapping(uint256 _chainId, uint32 _eid) external onlyOwner {
         chainId2Eid[_chainId] = _eid;
         eid2ChainId[_eid] = _chainId;
+        emit ChainIdAdded(_chainId, _eid);
     }
 
     /// @notice Sets the manager address
     /// @param _ccManager The manager address
     function setCCManager(address _ccManager) external onlyOwner {
+        address oldCCManager = ccManager;
+        require(oldCCManager != _ccManager, "CrossChainRelayV2: new CC manager is the same as the old one");
         ccManager = _ccManager;
+        emit CCManagerSet(oldCCManager, _ccManager);
     }
 
     /// @notice Sets the method gas limit mapping
@@ -202,6 +217,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     /// @param _lzValue The value to airdrop on the dst chain
     function setMethodOption(uint8 _method, uint128 _lzGas, uint128 _lzValue) external onlyOwner {
         lzOptions[_method] = LzOption({ lzGas: _lzGas, lzValue: _lzValue });
+        emit MethodOptionSet(_method, _lzGas, _lzValue);
     }
 
     /// @notice Estimates the gas fee for a cc message
@@ -272,7 +288,7 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
         address refundReceiver,
         OrderlyCrossChainMessage.MessageV1 memory data,
         bytes memory payload
-    ) internal returns (MessagingReceipt memory receipt) {
+    ) internal whenNotPaused returns (MessagingReceipt memory receipt) {
         uint32 dstEid = chainId2Eid[data.dstChainId];
         require(dstEid != 0, "CrossChainRelay: invalid dst chain id");
 
@@ -337,6 +353,6 @@ contract CrossChainRelayV2 is IOrderlyCrossChain, OApp, CrossChainRelayDataLayou
     /// @param to Recipient address
     /// @param amount Amount of tokens to withdraw
     function withdrawToken(address token, address to, uint256 amount) external onlyOwner {
-        IERC20(token).transfer(to, amount);
+        IERC20(token).safeTransfer(to, amount);
     }
 }

@@ -12,7 +12,7 @@
         },
         "amoy": {
             "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+            "CCManagerImplV2": "0x8eFD65990608B51177EE874B0629a3089B8CD79d",
             "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
         },
         "basesepolia": {

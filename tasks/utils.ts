@@ -149,6 +149,10 @@ export async function writeProposal(folderPath: string, proposal: any, proposalN
     
 }
 
+export function getLayerZeroScanLink(hash: string, isTestnet = true) {
+    console.log(isTestnet ? `https://testnet.layerzeroscan.com/tx/${hash}` : `https://layerzeroscan.com/tx/${hash}`)
+}
+
 
 
 

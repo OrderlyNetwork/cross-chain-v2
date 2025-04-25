@@ -16,12 +16,15 @@ task("order:deploy", "Deploys the contract to a specific network: CrossChainRela
         const {env, contract} = args
         utils.checkEnv(env)
         utils.checkContractType(contract)
+        utils.checkNetwork(env, hre.network.name)
         const [signer] = await hre.ethers.getSigners()
+        const endpointV2Deployment = await hre.deployments.get('EndpointV2')
         const salt = getSalt(hre, env)
         if (contract === 'CrossChainRelayV2') {
-            const ccV2ImplAddress = await deployCCRelayV2Impl(env, hre, signer)
+            const ccV2ImplAddress = await deployCCRelayV2Impl(env, hre, signer) //await deployCCRelayV2Impl(env, hre, signer)
             const factory = await getFactoryContract(hre, env, signer)
             const lzEndpoint = utils.getEndpoint(env)
+            // const lzEndpoint = endpointV2Deployment.address
             const delegate = signer.address
             const proxyBytecode = await getCCRelayV2ProxyBytecode(hre, ccV2ImplAddress, signer, lzEndpoint, delegate)
             
@@ -34,6 +37,27 @@ task("order:deploy", "Deploys the contract to a specific network: CrossChainRela
             throw new Error(`Contract type ${contract} not supported`)
         }
         
+    })
+
+task("order:getaddress", "Get the address of CrossChainRelayV2")
+    .addParam("env", "The environment to get address", undefined, types.string)
+    .addParam("salt", "The salt to get address", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+        const network = hre.network.name
+        const [signer] = await hre.ethers.getSigners()
+        const factory = await getFactoryContract(hre, env, signer)
+        const salt = hre.ethers.utils.id(args.salt + `${env}` || "deterministicDeployment")
+        const isManager = await factory.isManager(signer.address)
+        if (!isManager) {
+            console.log(`❗ ${signer.address} is not a manager for the factory contract on ${network} ${env}`)
+        } else {
+            console.log(`✅ ${signer.address} is a manager for the factory contract on ${network} ${env}`)
+        }
+        const predicateAddress = await factory.getDeployed(salt)
+        console.log(`Predicted address for your sals: ${predicateAddress}`)
+
     })
 
 
@@ -51,35 +75,10 @@ task("order:relayv2:set", "Connect CrossChainRelayV2 with each other between ord
         await setPeer(hre, env, network, ccRelayV2, signer)
         await setChainId(hre, env, network, ccRelayV2, signer)
         await setCCManager(hre, env, network, ccRelayV2, signer)
+        await setLzOption(hre, ccRelayV2, signer)
         
     })
 
-
-task("order:relayv2:setoptions", "Set the options of CrossChainRelayV2")
-    .addParam("env", "The environment to set options", undefined, types.string)
-    .setAction(async (args, hre) => {
-        const {env} = args
-        utils.checkEnv(env)
-        const network = hre.network.name
-        const [signer] = await hre.ethers.getSigners()
-        const ccRelayV2Address = utils.getCCRelayV2Address(env)
-        const ccRelayV2 = await getContract(hre, 'CrossChainRelayV2', ccRelayV2Address, signer)
-        const methods = utils.getMethod()
-
-        const methodsNames = Object.keys(methods).filter(k => isNaN(Number(k)));
-        for (const method of methodsNames) {
-            const methodIndex = methods[method as keyof typeof methods]
-            console.log(utils.getMethodOption(methodIndex))
-            console.log(methodIndex)
-            if (utils.isLedgerRelayMethod(methodIndex)) {
-                // TODO: set ledger relay config
-            } else if (utils.isVaultRelayMethod(methodIndex)) {
-                // TODO: set vault relay config
-            }
-        }
-
-        
-    })
 
 task("order:relayv2:getconfig", "Get the config of CrossChainRelayV2")
     .addParam("env", "The environment to get config", undefined, types.string)
@@ -103,6 +102,106 @@ task("order:relayv2:setconfig", "Set the config of CrossChainRelayV2")
         const {env} = args
         utils.checkEnv(env)
         // TODO: set config for mainnet
+    })
+
+task("order:relayv2:transfer", "Transfer gas token to the CrossChainRelayV2 contract")
+    .addParam("env", "The environment to transfer gas token", undefined, types.string)
+    .addParam("amount", "The amount of gas token to transfer", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {env, amount} = args
+        utils.checkEnv(env)
+        const network = hre.network.name
+        const [signer] = await hre.ethers.getSigners()
+        const ccRelayV2Address = utils.getCCRelayV2Address(env)
+        const gasTokenAmount = hre.ethers.utils.parseEther(amount)
+
+        const tx = await signer.sendTransaction({
+            to: ccRelayV2Address,
+            value: gasTokenAmount,
+            gasLimit: 100000
+        })
+        const receipt = await tx.wait()
+        console.log(`✅ Transferred ${amount} gas token to ${ccRelayV2Address} with tx hash: ${receipt.transactionHash}`)   
+    })
+
+task("order:relayv2:owner", "Set the owner of RelayV2 contract")
+    .addParam("env", "The environment to set owner", undefined, types.string)
+    .addFlag("setOwner", "Set the owner of RelayV2 contract", )
+    .setAction(async (taskArgs, hre) => {
+        const {env} = taskArgs
+        const network = hre.network.name
+        utils.checkEnv(env)
+        utils.checkNetwork(env, network)
+        const [signer] = await hre.ethers.getSigners()
+        const ccRelayV2Address = utils.getCCRelayV2Address(env)
+        const ccRelayV2 = await getContract(hre, 'CrossChainRelayV2', ccRelayV2Address, signer)
+        const owner = await ccRelayV2.owner()
+        const endpointV2Deployment = await hre.deployments.get('EndpointV2')
+        const endpointV2 = await hre.ethers.getContractAt(endpointV2Deployment.abi, endpointV2Deployment.address, signer)
+        const delegate = await endpointV2.delegates(ccRelayV2Address)
+        console.log(`Current owner: ${owner}`)
+        console.log(`Current delegate: ${delegate}`)
+        // const multiSig = utils.getMultisigAddress(env, network)
+        const multiSig = '0xD86F6E5D9F0a194E856d9BcD974886d4d1dF2769'
+        if (taskArgs.setOwner) {
+            const txSetDelegator = await ccRelayV2.setDelegate(multiSig)
+                    await txSetDelegator.wait()
+                    console.log(`Set OFT Delegator to ${multiSig}`)
+                    const txSetOwner = await ccRelayV2.transferOwnership(multiSig)
+                    await txSetOwner.wait()
+                    console.log(`Set OFT Owner to ${multiSig}`)
+        }
+    })
+
+task("order:relayv2:pingpong", "Pingpong test")
+    .addParam("env", "The environment to pingpong", undefined, types.string)
+    .addParam("dstNetwork", "The destination network to pingpong", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {env, dstNetwork} = args
+        utils.checkEnv(env)
+        utils.checkNetwork(env, dstNetwork)
+        const network = hre.network.name
+        utils.checkNetwork(env, network)
+        const [signer] = await hre.ethers.getSigners()
+        const ccRelayV2Address = utils.getCCRelayV2Address(env)
+        const ccRelayV2 = await getContract(hre, 'CrossChainRelayV2', ccRelayV2Address, signer)
+        const lzConfig = utils.getLzConfig(dstNetwork)
+        const tx = await ccRelayV2.pingPong(lzConfig.chainId)
+        const receipt = await tx.wait()
+        console.log(`Pingpong to ${dstNetwork} with tx hash: ${receipt.transactionHash}`)
+        utils.getLayerZeroScanLink(receipt.transactionHash)
+    })
+
+    task("lz:receive", "Receive a message on a specific network")
+    .addParam("hash", "The hash of the receive alert txn", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {network, hash} = args
+       
+        const receiveAlertTopic = hre.ethers.utils.id("LzReceiveAlert(address,address,(uint32,bytes32,uint64),bytes32,uint256,uint256,bytes,bytes,bytes)")
+        const endpointV2Deployment = await hre.deployments.get('EndpointV2')
+        const [ signer ] = await hre.ethers.getSigners()
+        const endpointV2 = await hre.ethers.getContractAt(endpointV2Deployment.abi, endpointV2Deployment.address, signer)
+
+        
+        const receiveAlertTxn = await hre.ethers.provider.getTransactionReceipt(hash)
+        if (!receiveAlertTxn) {
+            throw new Error(`Transaction with hash ${hash} not found`)
+        }
+        const logs = receiveAlertTxn.logs
+        const receiveAlertLog = logs.find(log => log.topics[0] === receiveAlertTopic)
+
+        if (!receiveAlertLog) {
+            throw new Error(`Receive alert log not found`)
+        }
+        const log = endpointV2.interface.parseLog(receiveAlertLog)
+        
+        const retryLzReceiveTx = await endpointV2.lzReceive(log.args["origin"], log.args["receiver"], log.args["guid"], log.args["message"], log.args["extraData"], {
+            gasLimit: log.args["gas"] * 2,
+            value: log.args["value"]
+        })
+
+        console.log(`lz receive sent with tx hash ${retryLzReceiveTx.hash}`)
+        utils.getLayerZeroScanLink(retryLzReceiveTx.hash)   
     })
 
 task("order:manager:upgrade", "Generate the proposal to upgrade the CCManager and set config")
@@ -244,6 +343,8 @@ async function deployContract(hre: HardhatRuntimeEnvironment, signer: SignerWith
         args: args
     })
     const contractAddress = deployedContract.address
+    // console.log(`deployed contract ${contract} `)
+    console.log(`deployed contract ${contract} to ${contractAddress} with tx hash: ${deployedContract.transactionHash}`)
     return contractAddress
 }
 
@@ -264,6 +365,32 @@ async function getFactoryContract(hre: HardhatRuntimeEnvironment, env: string, s
     return factory
 }
 
+async function setLzOption(hre: HardhatRuntimeEnvironment, ccRelayV2: Contract, signer: SignerWithAddress) {
+    let nonce = await signer.getTransactionCount()
+    const zeroValue = 0;  
+    const methods = utils.getMethod()
+
+    const methodsNames = Object.keys(methods).filter(k => isNaN(Number(k)));
+    console.log(`Print all message types and its gas limit:`)
+    for (const method of methodsNames) {
+        const methodIndex = methods[method as keyof typeof methods]
+        const gasLimit = utils.getMethodOption(methodIndex)
+        console.log(`${method}: ${gasLimit}`)
+        const [gasLimitOnRelay, _] = await ccRelayV2.lzOptions(methodIndex)
+        console.log(`Gas limit on relay v2: ${gasLimitOnRelay}`)
+        if (Number(gasLimitOnRelay) !== gasLimit) {
+            console.log(`❗ Gas limit on relay is not the same as the config file`)
+            const tx = await ccRelayV2.setMethodOption(methodIndex, gasLimit, zeroValue, {nonce: nonce++})
+            const receipt = await tx.wait()
+            console.log(`✅ Set gas limit on relay to ${gasLimit}: ${receipt.transactionHash}`)
+        } else {
+            console.log(`✅ Gas limit on relay is the same as the config file`)
+        }
+    }
+}
+
+// TODO
+async function setLzConfig() {}
 
 
 // Get the contract instance within the contracts folder
@@ -381,7 +508,7 @@ async function setPeer(hre: HardhatRuntimeEnvironment, env: string, network: str
                    const savedPeerAddress = await ccRelayV2.peers(lzConfig.endpointId)
                 //    console.log('savedPeerAddress', savedPeerAddress)
                    if (!samePeer(paddedPeerAddress, savedPeerAddress)) {
-                    console.log('Peer is not set, setting peer')
+                    console.log('❗ Peer is not set, setting peer to ',remoteNetwork)
                     eids.push(lzConfig.endpointId)
                     peers.push(paddedPeerAddress)
                    } else {
@@ -404,7 +531,7 @@ async function setPeer(hre: HardhatRuntimeEnvironment, env: string, network: str
             const savedPeerAddress = await ccRelayV2.peers(lzConfig.endpointId)
             // console.log('savedPeerAddress', savedPeerAddress)
             if (!samePeer(paddedPeerAddress, savedPeerAddress)) {
-                console.log('Peer not set, setting peer')
+                console.log('❗Peer not set, setting peer to orderly network')
                 const tx = await ccRelayV2.setPeer(lzConfig.endpointId, paddedPeerAddress, {nonce: nonce++})
                 const receipt = await tx.wait()
                 console.log(`✅ Set peer to ${ordderlyNetwork}: ${receipt.transactionHash}`)
@@ -427,7 +554,7 @@ async function setChainId(hre: HardhatRuntimeEnvironment, env: string, network: 
                 const lzConfig = utils.getLzConfig(remoteNetwork)
                 const savedEid = await ccRelayV2.chainId2Eid(lzConfig.chainId)
                 if (savedEid !== lzConfig.endpointId) {
-                    console.log('EID mismatch, setting EID')
+                    console.log(`❗ EID mismatch for ${remoteNetwork}, setting EID`)
                     const tx = await ccRelayV2.addChainIdMapping(lzConfig.chainId, lzConfig.endpointId, {nonce: nonce++})
                     const receipt = await tx.wait()
                     console.log(`✅ Set ChainId and Eid to ${remoteNetwork}: ${receipt.transactionHash}`)
@@ -443,7 +570,7 @@ async function setChainId(hre: HardhatRuntimeEnvironment, env: string, network: 
 
         const savedEid = await ccRelayV2.chainId2Eid(lzConfig.chainId)
         if (savedEid !== lzConfig.endpointId) {
-            console.log('EID mismatch, setting EID')
+            console.log(`❗ EID mismatch for ${ordderlyNetwork}, setting EID`)
             const tx = await ccRelayV2.addChainIdMapping(lzConfig.chainId, lzConfig.endpointId, {nonce: nonce++})
             const receipt = await tx.wait()
             console.log(`✅ Set ChainId and Eid to ${ordderlyNetwork}: ${receipt.transactionHash}`)
@@ -462,7 +589,7 @@ async function setCCManager(hre: HardhatRuntimeEnvironment, env: string, network
     // console.log('savedCCManagerAddress', savedCCManagerAddress)
     let nonce = await signer.getTransactionCount()
     if (savedCCManagerAddress.toLowerCase() !== ccManagerAddress.toLowerCase()) {
-        console.log('CCManager mismatch, setting CCManager')
+        console.log('❗ CCManager mismatch, setting CCManager')
         const tx = await ccRelayV2.setCCManager(ccManagerAddress, {nonce: nonce++})
         const receipt = await tx.wait()
         console.log(`✅ Set CCManager on ${network}: ${receipt.transactionHash}`)

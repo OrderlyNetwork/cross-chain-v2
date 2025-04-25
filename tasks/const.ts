@@ -6,7 +6,7 @@ export const ENVS = ['dev', 'qa', 'staging', 'mainnet']
 export const ORDERLY_TESTNET = 'orderlysepolia'
 export const ORDERLY_MAINNET = 'orderly'
 
-export const TEST_NETWORKS = ['arbitrumsepolia', 'opsepolia', ORDERLY_TESTNET] // 'opsepolia', 'amoy', 'basesepolia', 
+export const TEST_NETWORKS = ['arbitrumsepolia', 'opsepolia', 'amoy','basesepolia', 'sepolia', 'mantlesepolia', 'seitestnet', 'morphtestnet', 'sonictestnet', 'monadtestnet', 'fuji', ORDERLY_TESTNET] // 'opsepolia', 'amoy', 'basesepolia', 
 export const MAIN_NETWORKS = ['arbitrum', 'optimism', 'polygon', 'base', ORDERLY_MAINNET]
 
 export const TESTNET_ENDPOINT = '0x6EDCE65403992e310A62460808c4b910D972f10f'
@@ -89,7 +89,7 @@ export const CC_MANAGERS: Record<string, Record<string, Record<string, string>>>
 }
 
 export const CC_RELAY_V2_ADDRESSES: Record<string, string> = {
-    'dev': '0x6b9B9a02b6cDee854B5B49479E8aCab0b2819F04',
+    'dev': '0x84080B7BDF00ebAD06eDA7511Cb9415B0cBcc70c',
     'qa': '0x0000000000000000000000000000000000000000',
     'staging': '0x0000000000000000000000000000000000000000',
     'mainnet': '0x0000000000000000000000000000000000000000',
@@ -113,10 +113,10 @@ export const MORPH_MULTISIG_ADDRESSES: Record<string, string> = {
 }
 
 export const FACTORY_ADDRESSES: Record<string, string> = {
-    'dev': '0x2b1E9a839a873E05eeE8D90c6AfF7aA3E724E6cF',
-    'qa': '0x2b1E9a839a873E05eeE8D90c6AfF7aA3E724E6cF',
-    'staging': '0x2b1E9a839a873E05eeE8D90c6AfF7aA3E724E6cF',
-    'mainnet': '0x63b5af2724018347a1747a504e45f4e4c5ad0d04',
+    'dev': '0x912e0bE5d0079d09AC9706E485d355B5Ae7Af638',
+    'qa': '0x3C8ACD54f71F268B403Ff5E48a57C30775F0Aed6',
+    'staging': '0xC243F4598e13fC4CaaEE31aA629337E90058a5c3',
+    'mainnet': '0x63b5af2724018347a1747a504e45f4e4c5ad0d04',        // placeholder
 }
 
 type address = string
@@ -234,6 +234,11 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
             }
         }
     },
+    "mantlesepolia": {
+        endpointAddress: TESTNET_ENDPOINT,
+        endpointId: TestnetV2EndpointId.MANTLESEP_V2_TESTNET,
+        chainId: 5003,
+    },
     "sepolia": {
         endpointAddress: TESTNET_ENDPOINT,
         endpointId: TestnetV2EndpointId.SEPOLIA_V2_TESTNET,
@@ -274,6 +279,26 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
             }
         }
     },
+    "seitestnet": {
+        endpointAddress: TESTNET_ENDPOINT,
+        endpointId: TestnetV2EndpointId.SEI_V2_TESTNET,
+        chainId: 713715,
+    },
+    "morphtestnet": {
+        endpointAddress: "0x6C7Ab2202C98C4227C5c46f1417D81144DA716Ff",
+        endpointId: TestnetV2EndpointId.MORPH_V2_TESTNET,
+        chainId: 2810,
+    },
+    "sonictestnet": {
+        endpointAddress: "0x6C7Ab2202C98C4227C5c46f1417D81144DA716Ff",
+        endpointId: TestnetV2EndpointId.SONIC_V2_TESTNET,
+        chainId: 57054,
+    },
+    "monadtestnet": {
+        endpointAddress: "0x6C7Ab2202C98C4227C5c46f1417D81144DA716Ff",
+        endpointId: TestnetV2EndpointId.MONAD_V2_TESTNET,
+        chainId: 10143,
+    },
     "orderlysepolia": {
         endpointAddress: TESTNET_ENDPOINT,
         endpointId: TestnetV2EndpointId.ORDERLY_V2_TESTNET,
@@ -309,15 +334,15 @@ export enum MethodOption {
     Withdraw2Contract 
 }
 export const METHOD_OPTIONS: Record<MethodOption, number> = {
-    [MethodOption.Deposit]: 500_000,
-    [MethodOption.Withdraw]: 500_001,
-    [MethodOption.WithdrawFinish]: 500_002,
-    [MethodOption.Ping]: 500_003,
-    [MethodOption.PingPong]: 500_004,
-    [MethodOption.RebalanceBurn]: 500_005,
-    [MethodOption.RebalanceBurnFinish]: 500_006,
-    [MethodOption.RebalanceMint]: 500_007,
-    [MethodOption.RebalanceMintFinish]: 500_008,
-    [MethodOption.Withdraw2Contract]: 500_009,
+    [MethodOption.Deposit]: 300_000,
+    [MethodOption.Withdraw]: 400_000,
+    [MethodOption.WithdrawFinish]: 200_000,
+    [MethodOption.Ping]: 500_000,
+    [MethodOption.PingPong]: 500_000,
+    [MethodOption.RebalanceBurn]: 450_000,
+    [MethodOption.RebalanceBurnFinish]: 280_000,
+    [MethodOption.RebalanceMint]: 550_000,
+    [MethodOption.RebalanceMintFinish]: 280_000,
+    [MethodOption.Withdraw2Contract]: 500_000,
 }
 

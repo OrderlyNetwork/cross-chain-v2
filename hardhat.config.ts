@@ -56,12 +56,6 @@ const config: HardhatUserConfig = {
         ],
     },
     networks: {
-        
-        sepolia: {
-            eid: EndpointId.SEPOLIA_V2_TESTNET,
-            url: process.env.SEPOLIA_RPC_URL,
-            accounts,
-        },
         arbitrumsepolia: {
             eid: EndpointId.ARBSEP_V2_TESTNET,
             url: process.env.ARBITRUMSEPOLIA_RPC_URL,
@@ -77,19 +71,44 @@ const config: HardhatUserConfig = {
             url: process.env.AMOYSEPOLIA_RPC_URL,
             accounts,
           },
-        mantlesepolia: {
-            eid: EndpointId.MANTLESEP_V2_TESTNET,
-            url: process.env.MANTLESEPOLIA_RPC_URL,
-            accounts,
-        },
         basesepolia: {
             eid: EndpointId.BASESEP_V2_TESTNET,
             url: process.env.BASESEPOLIA_RPC_URL,
             accounts,
         },
+        mantlesepolia: {
+            eid: EndpointId.MANTLESEP_V2_TESTNET,
+            url: process.env.MANTLESEPOLIA_RPC_URL,
+            accounts,
+        },
+        sepolia: {
+            eid: EndpointId.SEPOLIA_V2_TESTNET,
+            url: process.env.SEPOLIA_RPC_URL,
+            accounts,
+        },
         fuji: {
             eid: EndpointId.AVALANCHE_V2_TESTNET,
             url: process.env.FUJI_RPC_URL,
+            accounts,
+        },
+        seitestnet: {
+            eid: EndpointId.SEI_V2_TESTNET,
+            url: process.env.SEITESTNET_RPC_URL,
+            accounts,
+        },
+        morphtestnet: {
+            eid: EndpointId.MORPH_V2_TESTNET,
+            url: process.env.MORPHTESTNET_RPC_URL,
+            accounts,
+        },
+        sonictestnet: {
+            eid: EndpointId.SONIC_V2_TESTNET,
+            url: process.env.SONICTESTNET_RPC_URL,
+            accounts,
+        },
+        monadtestnet: {
+            eid: EndpointId.MONAD_V2_TESTNET,
+            url: process.env.MONADTESTNET_RPC_URL,
             accounts,
         },
         bsctestnet: {

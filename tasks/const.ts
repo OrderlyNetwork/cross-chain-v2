@@ -6,87 +6,13 @@ export const ENVS = ['dev', 'qa', 'staging', 'mainnet']
 export const ORDERLY_TESTNET = 'orderlysepolia'
 export const ORDERLY_MAINNET = 'orderly'
 
-export const TEST_NETWORKS = ['arbitrumsepolia', 'opsepolia', 'amoy','basesepolia', 'sepolia', 'mantlesepolia', 'seitestnet', 'morphtestnet', 'sonictestnet', 'monadtestnet', 'fuji', ORDERLY_TESTNET] // 'opsepolia', 'amoy', 'basesepolia', 
-export const MAIN_NETWORKS = ['arbitrum', 'optimism', 'polygon', 'base', ORDERLY_MAINNET]
+export const TEST_NETWORKS = ['arbitrumsepolia', 'opsepolia', 'amoy','basesepolia', 'mantlesepolia', 'sepolia', 'fuji', 'seitestnet', 'morphtestnet', 'sonictestnet', 'monadtestnet', ORDERLY_TESTNET] //
+export const MAIN_NETWORKS = [ORDERLY_MAINNET] // 'arbitrum',  'optimism', 'polygon', 'base', 
 
 export const TESTNET_ENDPOINT = '0x6EDCE65403992e310A62460808c4b910D972f10f'
 export const MAINNET_ENDPOINT = '0x1a44076050125825900e736c501f859c50fE728c'
 
 export const CONTRACT_TYPES = ['CrossChainRelayV2']
-
-export const CC_MANAGERS: Record<string, Record<string, Record<string, string>>> = {
-    'dev': {
-        'arbitrumsepolia': {
-            'vaultCCManager': '0xCf474548756Eb48A14D08Ca514F728f72a8F629D',
-        },
-        'opsepolia': {
-            'vaultCCManager': '0xE8709025f99dd1B8533FB9b78Ca879Ee4ec7E70a',
-        },
-        'amoy': {
-            'vaultCCManager': '0xCf474548756Eb48A14D08Ca514F728f72a8F629D',
-        },
-        'basesepolia': {
-            'vaultCCManager': '0xCf474548756Eb48A14D08Ca514F728f72a8F629D',
-        },
-        'orderlysepolia': {
-            'ledgerCCManager': '0xdecdf6f646d5cfaf16abf12222ccc84febae5934',
-        },
-    },
-    'qa': {
-        'arbitrumsepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'opsepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'amoy': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'basesepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'orderlysepolia': {
-            'ledgerCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        
-    },
-    'staging': {
-        'arbitrumsepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'opsepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'amoy': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'basesepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'orderlysepolia': {
-            'ledgerCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        
-    },
-    'mainnet': {
-        'arbitrumsepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'opsepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'amoy': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'basesepolia': {
-            'vaultCCManager': '0x0000000000000000000000000000000000000000',
-        },
-        'orderlysepolia': {
-            'ledgerCCManager': '0x0000000000000000000000000000000000000000',
-        },
-    }
-
-}
 
 export const CC_RELAY_V2_ADDRESSES: Record<string, string> = {
     'dev': '0x84080B7BDF00ebAD06eDA7511Cb9415B0cBcc70c',

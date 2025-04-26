@@ -33,19 +33,6 @@ export function checkContractType(contractType: string) {
     throw new Error(`Invalid contract type: ${contractType}, must be one of ${constants.CONTRACT_TYPES.join(', ')}`)
 }
 
-export function getVaultCCManager(env: string, chain: string) {
-    if (chain === 'orderlysepolia' || chain === 'orderly') {
-        throw new Error(`Invalid chain: ${chain}, cannot be orderlysepolia or orderly`)
-    }
-    return constants.CC_MANAGERS[env][chain].vaultCCManager
-}
-
-export function getLedgerCCManager(env: string, chain: string) {
-    if (chain !== 'orderlysepolia' && chain !== 'orderly') {
-        throw new Error(`Invalid chain: ${chain}, must be orderlysepolia or orderly`)
-    }
-    return constants.CC_MANAGERS[env][chain].ledgerCCManager
-}
 
 export function getMultisigAddress(env: string, chain: string) {
     if (chain === 'morphtestnet') {

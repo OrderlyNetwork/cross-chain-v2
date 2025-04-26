@@ -111,11 +111,11 @@ const config: HardhatUserConfig = {
             url: process.env.MONADTESTNET_RPC_URL,
             accounts,
         },
-        bsctestnet: {
-            eid: EndpointId.BSC_V2_TESTNET,
-            url: process.env.BSCTESTNET_RPC_URL,
-            accounts,
-        },
+        // bsctestnet: {
+        //     eid: EndpointId.BSC_V2_TESTNET,
+        //     url: process.env.BSCTESTNET_RPC_URL,
+        //     accounts,
+        // },
         orderlysepolia: {
             eid: EndpointId.ORDERLY_V2_TESTNET,
             url: process.env.ORDERLYSEPOLIA_RPC_URL,
@@ -157,14 +157,41 @@ const config: HardhatUserConfig = {
             url: process.env.AVAX_RPC_URL,
             accounts,
         },
-        snowtrace: {
-            eid: EndpointId.AVALANCHE_MAINNET,
-            url: 'https://api.avax-test.network/ext/bc/C/rpc',
+        // snowtrace: {
+        //     eid: EndpointId.AVALANCHE_MAINNET,
+        //     url: 'https://api.avax-test.network/ext/bc/C/rpc',
+        //     accounts,
+        //   },
+        // 
+        sei: {
+            eid: EndpointId.SEI_MAINNET,
+            url: process.env.SEI_RPC_URL,
             accounts,
-          },
-        bsc: {
-            eid: EndpointId.BSC_V2_MAINNET,
-            url: process.env.BSC_RPC_URL,
+        },
+        morph: {
+            eid: EndpointId.MORPH_MAINNET,
+            url: process.env.MORPH_RPC_URL,
+            accounts,
+        },
+        sonic: {
+            eid: EndpointId.SONIC_MAINNET,
+            url: process.env.SONIC_RPC_URL,
+            accounts,
+        },
+
+        bera: {
+            eid: EndpointId.BERA_MAINNET,
+            url: process.env.BERA_RPC_URL,
+            accounts,
+        },
+        story: {
+            eid: EndpointId.STORY_MAINNET,
+            url: process.env.STORY_RPC_URL,
+            accounts,
+        },
+        mode: {
+            eid: EndpointId.MODE_MAINNET,
+            url: process.env.MODE_RPC_URL,
             accounts,
         },
         orderly: {

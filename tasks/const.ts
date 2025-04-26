@@ -80,6 +80,7 @@ type LzConfig = {
 }
 
 export const LZ_CONFIGS: Record<string, LzConfig> = {
+    // Testnets
     "arbitrumsepolia": {
         endpointAddress: TESTNET_ENDPOINT,
         endpointId: TestnetV2EndpointId.ARBSEP_V2_TESTNET,
@@ -242,6 +243,183 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
             receiveLibAddress: "0x3013C32e5F45E69ceA9baD4d96786704C2aE148c",
             ulnConfig: {
                 requiredDVNs: ["0x175d2B829604b82270D384393D25C666a822ab60"],
+            }
+        }
+    },
+    // Mainnets
+    
+    "arbitrum": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.ARBITRUM_V2_MAINNET,
+        chainId: 42161,
+        sendLibConfig: {
+            sendLibAddress: "0x975bcD720be66659e3EB3C0e4F1866a3020E493A",
+            executorConfig: {
+                executorAddress: "0x31CAe3B7fB82d847621859fb1585353c5720660D",
+            },
+            ulnConfig: {
+                requiredDVNs: ["0x2f55C492897526677C5B68fb199ea31E2c126416"],
+            }
+        },
+        receiveLibConfig: {
+            receiveLibAddress: "0x7B9E184e07a6EE1aC23eAe0fe8D6Be2f663f05e6",
+            ulnConfig: {
+                requiredDVNs: ["0x2f55C492897526677C5B68fb199ea31E2c126416"],
+            }
+        }
+    },
+    "optimism": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.OPTIMISM_V2_MAINNET,
+        chainId: 10,
+        sendLibConfig: {
+            sendLibAddress: "0x1322871e4ab09Bc7f5717189434f97bBD9546e95",
+            executorConfig: {
+                executorAddress: "0x2D2ea0697bdbede3F01553D2Ae4B8d0c486B666e",
+            },
+            ulnConfig: {
+                requiredDVNs: ["0x6A02D83e8d433304bba74EF1c427913958187142"],
+            }
+        },
+        receiveLibConfig: {
+            receiveLibAddress: "0x3c4962Ff6258dcfCafD23a814237B7d6Eb712063",
+            ulnConfig: {
+                requiredDVNs: ["0x6A02D83e8d433304bba74EF1c427913958187142"],
+            }
+        }
+    },
+    "polygon": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.POLYGON_V2_MAINNET,
+        chainId: 137,
+        sendLibConfig: {
+            sendLibAddress: "0x6c26c61a97006888ea9E4FA36584c7df57Cd9dA3",
+            executorConfig: {
+                executorAddress: "0xCd3F213AD101472e1713C72B1697E727C803885b",
+            },
+            ulnConfig: {
+                requiredDVNs: ["0x23DE2FE932d9043291f870324B74F820e11dc81A"],
+            }
+        },
+        receiveLibConfig: {
+            receiveLibAddress: "0x1322871e4ab09Bc7f5717189434f97bBD9546e95",
+            ulnConfig: {
+                requiredDVNs: ["0x23DE2FE932d9043291f870324B74F820e11dc81A"],
+            }
+        }
+    },
+    "base": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.BASE_V2_MAINNET,
+        chainId: 8453,
+        sendLibConfig: {
+            sendLibAddress: "0xB5320B0B3a13cC860893E2Bd79FCd7e13484Dda2",
+            executorConfig: {
+                executorAddress: "0x2CCA08ae69E0C44b18a57Ab2A87644234dAebaE4",
+            },
+            ulnConfig: {
+                requiredDVNs: ["0x9e059a54699a285714207b43B055483E78FAac25"],
+            }
+        },
+        receiveLibConfig: {
+            receiveLibAddress: "0xc70AB6f32772f59fBfc23889Caf4Ba3376C84bAf",
+            ulnConfig: {
+                requiredDVNs: ["0x9e059a54699a285714207b43B055483E78FAac25"],
+            }
+        }
+    },
+    "mantle": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.MANTLE_V2_MAINNET,
+        chainId: 5000,
+    },
+    "ethereum": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.ETHEREUM_V2_MAINNET,
+        chainId: 1,
+        sendLibConfig: {
+            sendLibAddress: "0xbB2Ea70C9E858123480642Cf96acbcCE1372dCe1",
+            executorConfig: {
+                executorAddress: "0x173272739Bd7Aa6e4e214714048a9fE699453059",
+            },
+            ulnConfig: {
+                requiredDVNs: ["0x589dEDbD617e0CBcB916A9223F4d1300c294236b"],
+            }
+        },
+        receiveLibConfig: {
+            receiveLibAddress: "0xc02Ab410f0734EFa3F14628780e6e695156024C2",
+            ulnConfig: {
+                requiredDVNs: ["0x589dEDbD617e0CBcB916A9223F4d1300c294236b"],
+            }
+        }
+    },
+    "avax": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.AVALANCHE_V2_MAINNET,
+        chainId: 43114,
+        sendLibConfig: {
+            sendLibAddress: "0x197D1333DEA5Fe0D6600E9b396c7f1B1cFCc558a",
+            executorConfig: {
+                executorAddress: "0x90E595783E43eb89fF07f63d27B8430e6B44bD9c",
+            },
+            ulnConfig: {
+                requiredDVNs: ["0x962f502a63f5fbeb44dc9ab932122648e8352959"],
+            }
+        },
+        receiveLibConfig: {
+            receiveLibAddress: "0xbf3521d309642FA9B1c91A08609505BA09752c61",
+            ulnConfig: {
+                requiredDVNs: ["0x962f502a63f5fbeb44dc9ab932122648e8352959"],
+            }
+        }
+    },
+    "sei": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.SEI_V2_MAINNET,
+        chainId: 1329,
+    },
+    "morph": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.MORPH_V2_MAINNET,
+        chainId: 2810,
+    },
+    "sonic": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.SONIC_V2_MAINNET,
+        chainId: 57054,
+    },
+    "bera": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.BERA_V2_MAINNET,
+        chainId: 288,
+    },
+    "story": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.STORY_V2_MAINNET,
+        chainId: 30364,
+    },
+    "mode": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.MODE_V2_MAINNET,
+        chainId: 30366,
+    },
+    "orderly": {
+        endpointAddress: MAINNET_ENDPOINT,
+        endpointId: MainnetV2EndpointId.ORDERLY_V2_MAINNET,
+        chainId: 291,
+        sendLibConfig: {
+            sendLibAddress: "0x5B23E2bAe5C5f00e804EA2C4C9abe601604378fa",
+            executorConfig: {
+                executorAddress: "0x1aCe9DD1BC743aD036eF2D92Af42Ca70A1159df5",
+            },
+            ulnConfig: {
+                requiredDVNs: ["0xF53857dbc0D2c59D5666006EC200cbA2936B8c35"],
+            }
+        },
+        receiveLibConfig: {
+            receiveLibAddress: "0xCFf08a35A5f27F306e2DA99ff198dB90f13DEF77",
+            ulnConfig: {
+                requiredDVNs: ["0xF53857dbc0D2c59D5666006EC200cbA2936B8c35"],
             }
         }
     },

@@ -31,8 +31,8 @@ task("order:deploy", "Deploys the contract to a specific network: CrossChainRela
             const tx = await factory.deploy(salt, proxyBytecode)
             const receipt = await tx.wait()
             console.log('deployed contract proxy with tx hash:', receipt.transactionHash)
-            const proxyAddress = receipt.contractAddress
-            console.log('relay v2 proxy address:', proxyAddress)
+            // const proxyAddress = receipt.contractAddress
+            console.log('relay v2 proxy address:', receipt.logs[0].address) // fix null output
         } else {
             throw new Error(`Contract type ${contract} not supported`)
         }
@@ -51,12 +51,12 @@ task("order:getaddress", "Get the address of CrossChainRelayV2")
         const salt = hre.ethers.utils.id(args.salt + `${env}` || "deterministicDeployment")
         const isManager = await factory.isManager(signer.address)
         if (!isManager) {
-            console.log(`❗ ${signer.address} is not a manager for the factory contract on ${network} ${env}`)
+            console.log(`❗ ${signer.address} is not a manager for the factory contract ${factory.address} on ${network} ${env}`)
         } else {
-            console.log(`✅ ${signer.address} is a manager for the factory contract on ${network} ${env}`)
+            console.log(`✅ ${signer.address} is a manager for the factory contract ${factory.address} on ${network} ${env}`)
         }
         const predicateAddress = await factory.getDeployed(salt)
-        console.log(`Predicted address for your sals: ${predicateAddress}`)
+        console.log(`Predicted address for your salt: ${predicateAddress}`)
 
     })
 
@@ -172,7 +172,7 @@ task("order:relayv2:pingpong", "Pingpong test")
         utils.getLayerZeroScanLink(receipt.transactionHash)
     })
 
-    task("lz:receive", "Receive a message on a specific network")
+task("lz:receive", "Receive a message on a specific network")
     .addParam("hash", "The hash of the receive alert txn", undefined, types.string)
     .setAction(async (args, hre) => {
         const {network, hash} = args

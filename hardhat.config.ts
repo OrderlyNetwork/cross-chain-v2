@@ -13,7 +13,7 @@ import { HardhatUserConfig, HttpNetworkAccountsUserConfig } from 'hardhat/types'
 
 import { EndpointId } from '@layerzerolabs/lz-definitions'
 
-import "./tasks/tasks"
+import './tasks/tasks'
 
 // Set your preferred authentication method
 //
@@ -38,10 +38,10 @@ if (accounts == null) {
 
 const config: HardhatUserConfig = {
     paths: {
-        sources: "./contracts", // default
-        artifacts: "./artifacts",
-        cache: "./cache"
-      },
+        sources: './contracts', // default
+        artifacts: './artifacts',
+        cache: './cache',
+    },
     solidity: {
         compilers: [
             {
@@ -56,6 +56,7 @@ const config: HardhatUserConfig = {
         ],
     },
     networks: {
+        // testnets
         arbitrumsepolia: {
             eid: EndpointId.ARBSEP_V2_TESTNET,
             url: process.env.ARBITRUMSEPOLIA_RPC_URL,
@@ -70,7 +71,7 @@ const config: HardhatUserConfig = {
             eid: EndpointId.AMOY_V2_TESTNET,
             url: process.env.AMOYSEPOLIA_RPC_URL,
             accounts,
-          },
+        },
         basesepolia: {
             eid: EndpointId.BASESEP_V2_TESTNET,
             url: process.env.BASESEPOLIA_RPC_URL,
@@ -123,37 +124,37 @@ const config: HardhatUserConfig = {
         },
         // mainnets
         ethereum: {
-            eid: EndpointId.ETHEREUM_MAINNET,
+            eid: EndpointId.ETHEREUM_V2_MAINNET,
             url: process.env.ETHEREUM_RPC_URL,
             accounts,
         },
         arbitrum: {
-            eid: EndpointId.ARBITRUM_MAINNET,
+            eid: EndpointId.ARBITRUM_V2_MAINNET,
             url: process.env.ARBITRUM_RPC_URL,
             accounts,
         },
         optimism: {
-            eid: EndpointId.OPTIMISM_MAINNET,
+            eid: EndpointId.OPTIMISM_V2_MAINNET,
             url: process.env.OPTIMISM_RPC_URL,
             accounts,
         },
         polygon: {
-            eid: EndpointId.POLYGON_MAINNET,
+            eid: EndpointId.POLYGON_V2_MAINNET,
             url: process.env.POLYGON_RPC_URL,
             accounts,
         },
         base: {
-            eid: EndpointId.BASE_MAINNET,
+            eid: EndpointId.BASE_V2_MAINNET,
             url: process.env.BASE_RPC_URL,
             accounts,
         },
         mantle: {
-            eid: EndpointId.MANTLE_MAINNET,
+            eid: EndpointId.MANTLE_V2_MAINNET,
             url: process.env.MANTLE_RPC_URL,
             accounts,
         },
         avax: {
-            eid: EndpointId.AVALANCHE_MAINNET,
+            eid: EndpointId.AVALANCHE_V2_MAINNET,
             url: process.env.AVAX_RPC_URL,
             accounts,
         },
@@ -162,43 +163,48 @@ const config: HardhatUserConfig = {
         //     url: 'https://api.avax-test.network/ext/bc/C/rpc',
         //     accounts,
         //   },
-        // 
+        //
         sei: {
-            eid: EndpointId.SEI_MAINNET,
+            eid: EndpointId.SEI_V2_MAINNET,
             url: process.env.SEI_RPC_URL,
             accounts,
         },
         morph: {
-            eid: EndpointId.MORPH_MAINNET,
+            eid: EndpointId.MORPH_V2_MAINNET,
             url: process.env.MORPH_RPC_URL,
             accounts,
         },
         sonic: {
-            eid: EndpointId.SONIC_MAINNET,
+            eid: EndpointId.SONIC_V2_MAINNET,
             url: process.env.SONIC_RPC_URL,
             accounts,
         },
-
+        // monad: {
+        //     eid: EndpointId.MONAD_V2_MAINNET,
+        //     url: process.env.MONAD_RPC_URL,
+        //     accounts,
+        // },
+        //
         bera: {
-            eid: EndpointId.BERA_MAINNET,
+            eid: EndpointId.BERA_V2_MAINNET,
             url: process.env.BERA_RPC_URL,
             accounts,
         },
         story: {
-            eid: EndpointId.STORY_MAINNET,
+            eid: EndpointId.STORY_V2_MAINNET,
             url: process.env.STORY_RPC_URL,
             accounts,
         },
         mode: {
-            eid: EndpointId.MODE_MAINNET,
+            eid: EndpointId.MODE_V2_MAINNET,
             url: process.env.MODE_RPC_URL,
             accounts,
         },
         orderly: {
-            eid: EndpointId.ORDERLY_MAINNET,
+            eid: EndpointId.ORDERLY_V2_MAINNET,
             url: process.env.ORDERLY_RPC_URL,
             accounts,
-        }
+        },
     },
     namedAccounts: {
         deployer: {

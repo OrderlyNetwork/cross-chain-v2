@@ -205,6 +205,35 @@ task("lz:receive", "Receive a message on a specific network")
         utils.getLayerZeroScanLink(retryLzReceiveTx.hash)   
     })
 
+task("lz:nonce", "Get the nonce of relayv2 on the LayerZero endpoint")
+    .addParam("env", "The environment to get nonce", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+        const networks = utils.getNetworks(env)
+        for (const vaultNetwork of networks) {
+            const orderlyNetwork = utils.getOrderlyNetwork(env)
+            const orderlyLzConfig = utils.getLzConfig(orderlyNetwork)
+            const [orderlySigner, orderlyProvider] = getNetworkSignerAndProvider(hre, orderlyNetwork)
+            const relayV2Address = utils.getCCRelayV2Address(env)
+            const endpointV2Deployment = await hre.deployments.get('EndpointV2')
+            const paddedRelayV2Address = hre.ethers.utils.hexZeroPad(relayV2Address, 32)
+            const orderlyEndpointV2 = await hre.ethers.getContractAt(endpointV2Deployment.abi, orderlyLzConfig.endpointAddress, orderlySigner)
+            if (vaultNetwork !== orderlyNetwork) {
+               const [vaultSigner, vaultProvider] = getNetworkSignerAndProvider(hre, vaultNetwork)
+               const vaultLzConfig = utils.getLzConfig(vaultNetwork)
+               const vaultEndpointV2 = await hre.ethers.getContractAt(endpointV2Deployment.abi, vaultLzConfig.endpointAddress, vaultSigner)
+               
+               const vaultSentNonce = await vaultEndpointV2.outboundNonce(relayV2Address, orderlyLzConfig.endpointId, paddedRelayV2Address)
+               const orderlyReceivedNonce = await orderlyEndpointV2.inboundNonce(relayV2Address, vaultLzConfig.endpointId, paddedRelayV2Address)
+               console.log(`Msg sent from 🔑 ${vaultNetwork} to 💰 ${orderlyNetwork}: ${vaultSentNonce} -> ${orderlyReceivedNonce} received ${ Number(vaultSentNonce) === Number(orderlyReceivedNonce)   ? "✅" : "❌" }`)
+               const orderlySentNonce = await orderlyEndpointV2.outboundNonce(relayV2Address, vaultLzConfig.endpointId, paddedRelayV2Address)
+               const vaultReceivedNonce = await vaultEndpointV2.inboundNonce(relayV2Address, orderlyLzConfig.endpointId, paddedRelayV2Address)
+               console.log(`Msg sent from 💰 ${orderlyNetwork} to 🔑 ${vaultNetwork}: ${orderlySentNonce} -> ${vaultReceivedNonce} received ${ Number(orderlySentNonce) === Number(vaultReceivedNonce)   ? "✅" : "❌" }`)
+            } 
+        }
+        
+    })
 task("order:relayv2:nonce", "Get the nonce of the CrossChainRelayV2 contract")
     .addParam("env", "The environment to get nonce", undefined, types.string)
     .setAction(async (args, hre) => {

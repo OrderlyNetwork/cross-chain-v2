@@ -205,6 +205,42 @@ task("lz:receive", "Receive a message on a specific network")
         utils.getLayerZeroScanLink(retryLzReceiveTx.hash)   
     })
 
+task("order:relayv2:nonce", "Get the nonce of the CrossChainRelayV2 contract")
+    .addParam("env", "The environment to get nonce", undefined, types.string)
+    .setAction(async (args, hre) => {
+        // const envs = utils.getEnvs()
+        const {env} = args
+        utils.checkEnv(env)
+        // for (const env of envs) {
+            console.log(`======= RelayV2 nonce for ${env} =======`)
+            
+            const networks = utils.getNetworks(env)
+            const relayV2Address = utils.getCCRelayV2Address(env)
+            const paddedPeerAddress = hre.ethers.utils.hexZeroPad(relayV2Address, 32)
+            for (const network of networks) {
+
+                    const [signer, provider] = getNetworkSignerAndProvider(hre, network)
+                    const relayV2 = await hre.ethers.getContractAt("CrossChainRelayV2", relayV2Address, signer)
+
+                if (!utils.isOrderlyNetwork(network)) {
+                    const orderlyNetwork = utils.getOrderlyNetwork(env)
+                    const lzConfig = utils.getLzConfig(orderlyNetwork)
+                    const nonce = await relayV2.nonce(lzConfig.endpointId, paddedPeerAddress)
+                    console.log(`Nonce from ${network}: ${nonce}`)
+                } else {
+                    for (const vaultNetwork of networks) {
+                        if (!utils.isOrderlyNetwork(vaultNetwork)) {
+                            const lzConfig = utils.getLzConfig(vaultNetwork)
+                            const nonce = await relayV2.nonce(lzConfig.endpointId, paddedPeerAddress)
+                            console.log(`Nonce to ${vaultNetwork}: ${nonce}`)
+                        }
+                    }
+                }
+            }  
+        // }
+    })
+
+
 task("order:manager:upgrade", "Generate the proposal to upgrade the CCManager and set config")
     .addParam("env", "The environment to upgrade the CCManager", undefined, types.string)
     .addFlag("writeProposal", "Write the proposal to the safe tasks folder")
@@ -487,6 +523,14 @@ async function printVaultRelayConfig(hre: HardhatRuntimeEnvironment, env: string
         await printConfig(hre, endpointV2, relayV2Address, network)
         
     }
+}
+
+function getNetworkSignerAndProvider(hre: HardhatRuntimeEnvironment, network: string) {
+    hre.network.name = network;
+    hre.network.config = hre.config.networks[network]
+    const provider = new hre.ethers.providers.JsonRpcProvider(hre.config.networks[network].url)  // url is defined in HttpNetworkConfig
+    const signer = new ethers.Wallet(hre.config.networks[network].accounts[0], provider)
+    return [signer, provider]
 }
 
 // Print the config of CrossChainRelayV2 on a specific chain

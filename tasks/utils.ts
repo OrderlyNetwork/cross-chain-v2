@@ -60,6 +60,10 @@ export function getNetworks(env: string) {
     return constants.TEST_NETWORKS
 }
 
+export function getEnvs() {
+    return constants.ENVS
+}
+
 export function isOrderlyNetwork(network: string) {
     return network === 'orderly' || network === 'orderlysepolia'
 }

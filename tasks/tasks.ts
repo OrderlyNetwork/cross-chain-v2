@@ -321,6 +321,42 @@ task("order:manager:relayoption", "Propose to enable CrossChainRelayV2 as the de
         }
     })
 
+task("order:manager:disable", "Propose to disable CrossChainRelayV1")
+    .addParam("env", "The environment to disable CrossChainRelayV1", undefined, types.string)
+    .addFlag("writeProposal", "Write the proposal to the safe tasks folder")
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+        const [signer] = await hre.ethers.getSigners()
+        const network = hre.network.name
+        const ccManager = await getCCManagerContract(hre, env, network, signer)
+        const ccRelayV1Address = (await utils.getOrderlyAddresses(env))[env][network].CCRelayV1
+        const ccRelayV1Status = await ccManager.enabledRelays(ccRelayV1Address)
+        let proposals = []
+        if (ccRelayV1Status !== 0) {
+            const proposalSetRelayStatus = {
+                "_description": "Set the relay status of CrossChainRelayV1",
+                "to": `${ccManager.address}`,
+                "value": "0",
+                "method": "setRelayStatus(address,bool)",
+                "params": [`${ccRelayV1Address}`, false],
+                "operation": 0
+            }
+            proposals.push(proposalSetRelayStatus)
+        } else {
+            console.log(`✅ CrossChainRelayV1 is already disabled`)
+        }
+        
+        console.log(JSON.stringify(proposals, null, 2)) 
+
+        const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'DISABLE_RELAY_V1'.toUpperCase()}.json`
+        if (args.writeProposal) {
+            await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
+            console.log(`✅ Written proposal to disable CrossChainRelayV1 to ${utils.PROPOSAL_FOLDER}`)
+        }
+        
+    })
+
 // Deploy the CrossChainRelayV2 contract implementation
 async function deployCCRelayV2Impl(env: string, hre: HardhatRuntimeEnvironment, signer: SignerWithAddress) {
 

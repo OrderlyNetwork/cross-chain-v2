@@ -18,15 +18,16 @@ task("order:deploy", "Deploys the contract to a specific network: CrossChainRela
         utils.checkContractType(contract)
         utils.checkNetwork(env, hre.network.name)
         const [signer] = await hre.ethers.getSigners()
-        const endpointV2Deployment = await hre.deployments.get('EndpointV2')
+        const endpointV2 = await getEndpointV2Contract(hre, signer)
         const salt = getSalt(hre, env)
         if (contract === 'CrossChainRelayV2') {
             const ccV2ImplAddress = await deployCCRelayV2Impl(env, hre, signer) //await deployCCRelayV2Impl(env, hre, signer)
             const factory = await getFactoryContract(hre, env, signer)
-            const lzEndpoint = utils.getEndpoint(env)
-            // const lzEndpoint = endpointV2Deployment.address
+            // const  = utils.getEndpoint(env, hre.network.name)
+            const lzEndpointAddress = endpointV2.address
+            console.log(`lzEndpointAddress: ${lzEndpointAddress}`)
             const delegate = signer.address
-            const proxyBytecode = await getCCRelayV2ProxyBytecode(hre, ccV2ImplAddress, signer, lzEndpoint, delegate)
+            const proxyBytecode = await getCCRelayV2ProxyBytecode(hre, ccV2ImplAddress, signer, lzEndpointAddress, delegate)
             
             const tx = await factory.deploy(salt, proxyBytecode)
             const receipt = await tx.wait()

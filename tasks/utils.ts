@@ -49,11 +49,8 @@ export function getFactoryAddress(env: string) {
     return constants.FACTORY_ADDRESSES[env]
 }
 
-export function getEndpoint(env: string) {
-    if (env === 'mainnet') {
-        return constants.MAINNET_ENDPOINT
-    }
-    return constants.TESTNET_ENDPOINT
+export function getEndpoint(env: string, network: string) {
+    return constants.LZ_CONFIGS[network].endpointAddress
 }
 
 export function getNetworks(env: string) {

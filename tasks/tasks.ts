@@ -210,6 +210,8 @@ task("lz:nonce", "Get the nonce of relayv2 on the LayerZero endpoint")
     .setAction(async (args, hre) => {
         const {env} = args
         utils.checkEnv(env)
+        const padNetworkName = (str: string, len = 15) => str.toString().padEnd(len);
+        const padNonce = (str: string, len = 3) => str.toString().padStart(len);
         const networks = utils.getNetworks(env)
         for (const vaultNetwork of networks) {
             const orderlyNetwork = utils.getOrderlyNetwork(env)
@@ -226,10 +228,10 @@ task("lz:nonce", "Get the nonce of relayv2 on the LayerZero endpoint")
                
                const vaultSentNonce = await vaultEndpointV2.outboundNonce(relayV2Address, orderlyLzConfig.endpointId, paddedRelayV2Address)
                const orderlyReceivedNonce = await orderlyEndpointV2.inboundNonce(relayV2Address, vaultLzConfig.endpointId, paddedRelayV2Address)
-               console.log(`Msg sent from 🔑 ${vaultNetwork} to 💰 ${orderlyNetwork}: ${vaultSentNonce} -> ${orderlyReceivedNonce} received ${ Number(vaultSentNonce) === Number(orderlyReceivedNonce)   ? "✅" : "❌" }`)
+               console.log(`Msg sent from 🔑 ${padNetworkName(vaultNetwork)} to 💰 ${padNetworkName(orderlyNetwork)}: ${padNonce(vaultSentNonce)} -> ${padNonce(orderlyReceivedNonce)} received ${ Number(vaultSentNonce) === Number(orderlyReceivedNonce)   ? "✅" : "❌" }`)
                const orderlySentNonce = await orderlyEndpointV2.outboundNonce(relayV2Address, vaultLzConfig.endpointId, paddedRelayV2Address)
                const vaultReceivedNonce = await vaultEndpointV2.inboundNonce(relayV2Address, orderlyLzConfig.endpointId, paddedRelayV2Address)
-               console.log(`Msg sent from 💰 ${orderlyNetwork} to 🔑 ${vaultNetwork}: ${orderlySentNonce} -> ${vaultReceivedNonce} received ${ Number(orderlySentNonce) === Number(vaultReceivedNonce)   ? "✅" : "❌" }`)
+               console.log(`Msg sent from 💰 ${padNetworkName(orderlyNetwork)} to 🔑 ${padNetworkName(vaultNetwork)}: ${padNonce(orderlySentNonce)} -> ${padNonce(vaultReceivedNonce)} received ${ Number(orderlySentNonce) === Number(vaultReceivedNonce)   ? "✅" : "❌" }`)
             } 
         }
         

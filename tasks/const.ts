@@ -7,16 +7,16 @@ export const ORDERLY_MAINNET = 'orderly'
 
 export const TEST_NETWORKS = [
     'arbitrumsepolia',
-    // 'opsepolia',
-    // 'amoy',
-    // 'basesepolia',
-    // 'mantlesepolia',
-    // 'sepolia',
-    // 'fuji',
-    // 'seitestnet',
-    // 'morphtestnet',
-    // 'sonictestnet',
-    // 'monadtestnet',
+    'opsepolia',
+    'amoy',
+    'basesepolia',
+    'mantlesepolia',
+    'sepolia',
+    'fuji',
+    'seitestnet',
+    'morphtestnet',
+    'sonictestnet',
+    'monadtestnet',
     ORDERLY_TESTNET,
 ] //
 export const MAIN_NETWORKS = [ORDERLY_MAINNET] // 'arbitrum',  'optimism', 'polygon', 'base',
@@ -631,7 +631,7 @@ export enum MethodOption {
 }
 export const METHOD_OPTIONS: Record<MethodOption, number> = {
     [MethodOption.Deposit]: 300_000,
-    [MethodOption.Withdraw]: 400_000,
+    [MethodOption.Withdraw]: 500_000,
     [MethodOption.WithdrawFinish]: 200_000,
     [MethodOption.Ping]: 500_000,
     [MethodOption.PingPong]: 500_000,

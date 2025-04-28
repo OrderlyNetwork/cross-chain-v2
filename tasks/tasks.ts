@@ -348,6 +348,7 @@ task("order:manager:relayoption", "Propose to enable CrossChainRelayV2 as the de
         const network = hre.network.name
         const ccManager = await getCCManagerContract(hre, env, network, signer)
         let proposals = []
+        // set relay option for ledger network (orderly sepolia)
         if (utils.isOrderlyNetwork(network)) {
             const networks = utils.getNetworks(env)
             for (const vaultNetwork of networks) {
@@ -370,9 +371,33 @@ task("order:manager:relayoption", "Propose to enable CrossChainRelayV2 as the de
                     }
                 }
             }
-        } else {
-            const relayOption = await ccManager.ccRelayOption()
-            if (relayOption !== 1) {
+        } 
+        // set relay option for vault networks
+        else {
+            // new logic, first check if ccManager on vault network is upgraded using try-catch pattern
+            // when upgraded: check relayOption, when relayOption !== 1, push proposal
+            // when not upgraded: print message, push proposal
+            try {
+                const relayOption = await ccManager.ccRelayOption()
+                if (relayOption !== 1) {
+                    console.log(`⛔ Relay option to V2 for ${network} is not set, generate proposal for setting relay option...`)
+                    const proposalSetRelayOption = {
+                        "_description": "Set the relay option of CrossChainRelayV2",
+                        "to": `${ccManager.address}`,
+                        "value": "0",
+                        "method": "setCCRelayOption(uint8)",
+                        "params": [1],
+                        "operation": 0
+                    } 
+                    proposals.push(proposalSetRelayOption)
+                } else {
+                    console.log(`✅ Relay option to V2 for ${network} already set`)
+                }
+            } catch (error) {
+                // only for CC V2 migration convenience: can generate proposal for relay option when CCManager not upgraded on vault networks
+                // console.log(error)
+                console.log(`⛔ CCManager on ${network} is not upgraded, generate proposal for setting relay option in advance...`)
+                console.log(`⛔ Remember to upgrade CCManager on ${network} first, before setting relay option!`)
                 const proposalSetRelayOption = {
                     "_description": "Set the relay option of CrossChainRelayV2",
                     "to": `${ccManager.address}`,
@@ -380,12 +405,25 @@ task("order:manager:relayoption", "Propose to enable CrossChainRelayV2 as the de
                     "method": "setCCRelayOption(uint8)",
                     "params": [1],
                     "operation": 0
-                }
+                } 
                 proposals.push(proposalSetRelayOption)
-            } else {
-                console.log(`✅ Relay option to V2 for ${network} already set`)
             }
-            
+
+            // const relayOption = await ccManager.ccRelayOption()
+            // if (relayOption !== 1) {
+            //     const proposalSetRelayOption = {
+            //         "_description": "Set the relay option of CrossChainRelayV2",
+            //         "to": `${ccManager.address}`,
+            //         "value": "0",
+            //         "method": "setCCRelayOption(uint8)",
+            //         "params": [1],
+            //         "operation": 0
+            //     }
+            //     proposals.push(proposalSetRelayOption)
+            // } else {
+            //     console.log(`✅ Relay option to V2 for ${network} already set`)
+            // }
+
         }
         console.log(JSON.stringify(proposals, null, 2)) 
 

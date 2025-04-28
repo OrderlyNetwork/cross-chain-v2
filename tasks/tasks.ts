@@ -143,14 +143,16 @@ task("order:relayv2:owner", "Set the owner of RelayV2 contract")
         console.log(`Current owner: ${owner}`)
         console.log(`Current delegate: ${delegate}`)
         // const multiSig = utils.getMultisigAddress(env, network)
+        let nonce = await hre.ethers.provider.getTransactionCount(signer.address)
+        console.log(`Nonce: ${nonce}`)
         const multiSig = '0xD86F6E5D9F0a194E856d9BcD974886d4d1dF2769'
         if (taskArgs.setOwner) {
-            const txSetDelegator = await ccRelayV2.setDelegate(multiSig)
-                    await txSetDelegator.wait()
-                    console.log(`Set OFT Delegator to ${multiSig}`)
-                    const txSetOwner = await ccRelayV2.transferOwnership(multiSig)
-                    await txSetOwner.wait()
-                    console.log(`Set OFT Owner to ${multiSig}`)
+            const txSetDelegator = await ccRelayV2.setDelegate(multiSig, {nonce: nonce++})
+            await txSetDelegator.wait()
+            console.log(`Set OFT Delegator to ${multiSig}`)
+            const txSetOwner = await ccRelayV2.transferOwnership(multiSig, {nonce: nonce++})
+            await txSetOwner.wait()
+            console.log(`Set OFT Owner to ${multiSig}`)
         }
     })
 

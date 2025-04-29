@@ -65,7 +65,11 @@ export function getEnvs() {
 }
 
 export function isOrderlyNetwork(network: string) {
-    return network === 'orderly' || network === 'orderlysepolia'
+    return network === constants.ORDERLY_MAINNET || network === constants.ORDERLY_TESTNET
+}
+
+export function isPolygonNetwork(network: string) {
+    return network === 'amoy' || network === 'polygon'
 }
 
 export function getOrderlyNetwork(env: string) {
@@ -107,11 +111,30 @@ export function isLedgerRelayMethod(method: constants.MethodOption) {
 }
 
 // Get orderly contracts address
-export async function getOrderlyAddresses(env: string) {
-    const orderlyContractsPath = path.join(__dirname, './asset/OrderlyContracts.json')
+const ORDERLY_CONTRACTS_PATH = path.join(__dirname, './asset/OrderlyContracts.json')
+export async function getOrderlyAddresses() {
+    const orderlyContractsPath = path.join(__dirname, ORDERLY_CONTRACTS_PATH)
     const orderlyAddresses = JSON.parse(fs.readFileSync(orderlyContractsPath, "utf8"));
     return orderlyAddresses
 }
+
+export async function saveContractAddress(env: string, network: string, contractName: string, address: string) {
+    if (fs.existsSync(ORDERLY_CONTRACTS_PATH)) {
+        const data = fs.readFileSync(ORDERLY_CONTRACTS_PATH, 'utf-8');
+        const orderlyAddresses = JSON.parse(data);
+        if (!orderlyAddresses[env]) {
+            orderlyAddresses[env] = {}
+        }
+        if (!orderlyAddresses[env][network]) {
+            orderlyAddresses[env][network] = {}
+        }
+        orderlyAddresses[env][network][contractName] = address;
+        fs.writeFileSync(ORDERLY_CONTRACTS_PATH, JSON.stringify(orderlyAddresses, null, 2));
+        console.log(`Address of ${contractName} saved on ${env} ${network}`)
+    } else {
+        throw new Error("Address file not found")
+    }
+ }
 
 export const PROPOSAL_FOLDER = path.join(__dirname, '../../safe-tasks/txn/CrossChain/')
 export async function writeProposal(folderPath: string, proposal: any, proposalName: string) {
@@ -137,8 +160,21 @@ export async function writeProposal(folderPath: string, proposal: any, proposalN
     
 }
 
+export const TX_PATH_PREFIX = './txn/CrossChain/'
+export function printSafeCommand(env: string, network: string, proposalName: string){
+    console.log(`yarn safe propose-multi --env ${env} --network ${getSafeNetwork(network)} ${TX_PATH_PREFIX}${proposalName}`)
+}
+
 export function getLayerZeroScanLink(hash: string, isTestnet = true) {
     console.log(isTestnet ? `https://testnet.layerzeroscan.com/tx/${hash}` : `https://layerzeroscan.com/tx/${hash}`)
+}
+
+export function getNetworkNameToVerify(network: string) {
+    return constants.NETWORK_NAME_MAP_TO_VERIFY[network]
+}
+
+export function getSafeNetwork(network: string) {
+    return constants.NETWORK_NAME_MAP_TO_SAFE[network]
 }
 
 

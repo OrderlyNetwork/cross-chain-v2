@@ -6,13 +6,13 @@ export const ORDERLY_TESTNET = 'orderlysepolia'
 export const ORDERLY_MAINNET = 'orderly'
 
 export const TEST_NETWORKS = [
-    'arbitrumsepolia',
-    'opsepolia',
-    'amoy',
-    'basesepolia',
-    'mantlesepolia',
-    'sepolia',
-    'fuji',
+    // 'arbitrumsepolia',
+    // 'opsepolia',
+    // 'amoy',
+    // 'basesepolia',
+    // 'mantlesepolia',
+    // 'sepolia',
+    // 'fuji',
     'seitestnet',
     'morphtestnet',
     'sonictestnet',
@@ -29,7 +29,7 @@ export const CONTRACT_TYPES = ['CrossChainRelayV2']
 export const CC_RELAY_V2_ADDRESSES: Record<string, string> = {
     dev: '0x84080B7BDF00ebAD06eDA7511Cb9415B0cBcc70c',
     qa: '0xf366e3234CF777db58100b7aCCCdb6d84D366671',
-    staging: '0x0000000000000000000000000000000000000000',
+    staging: '0xe907d027F6E62794021b9839B4D234618d11Ebab',
     mainnet: '0x0000000000000000000000000000000000000000',
 }
 
@@ -640,4 +640,35 @@ export const METHOD_OPTIONS: Record<MethodOption, number> = {
     [MethodOption.RebalanceMint]: 550_000,
     [MethodOption.RebalanceMintFinish]: 280_000,
     [MethodOption.Withdraw2Contract]: 500_000,
+}
+
+
+export const NETWORK_NAME_MAP_TO_VERIFY: Record<string, string> = {
+    'arbitrumsepolia': 'arbitrum-sepolia',
+    'opsepolia': 'optimism-sepolia',
+    'amoy': 'polygon-amoy',
+    'basesepolia': 'base-sepolia',
+    'mantlesepolia': 'mantle-sepolia',
+    'sepolia': 'sepolia',
+    'fuji': 'fuji',
+    'seitestnet': 'seitestnet',
+    'morphtestnet': 'morph-holesky',
+    'sonictestnet': 'sonic-testnet',
+    'monadtestnet': 'monad-testnet',
+    'orderlysepolia': 'orderlysepolia',
+}
+
+export const NETWORK_NAME_MAP_TO_SAFE: Record<string, string> = {
+    'arbitrumsepolia': 'arbsepolia',
+    'opsepolia': 'opsepolia',
+    'amoy': 'amoy',
+    'basesepolia': 'basesepolia',
+    'mantlesepolia': 'mantlesepolia',
+    'sepolia': 'sepolia',
+    'fuji': 'fuji',
+    'seitestnet': 'arctic',
+    'morphtestnet': 'morphholesky',
+    'sonictestnet': 'sonictestnet',
+    'monadtestnet': 'monadtestnet',
+    'orderlysepolia': 'orderlysepolia',
 }

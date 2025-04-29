@@ -8,7 +8,6 @@ import path from 'path'
 import fs from 'fs'
 
 
-
 task("order:deploy", "Deploys the contract to a specific network: CrossChainRelayV2")
     .addParam("env", "The environment to deploy the CrossChainRelayV2 contract", undefined, types.string)
     .addParam("contract", "The contract to deploy", undefined, types.string)
@@ -22,6 +21,7 @@ task("order:deploy", "Deploys the contract to a specific network: CrossChainRela
         const salt = getSalt(hre, env)
         if (contract === 'CrossChainRelayV2') {
             const ccV2ImplAddress = await deployCCRelayV2Impl(env, hre, signer) //await deployCCRelayV2Impl(env, hre, signer)
+            await utils.saveContractAddress(env, hre.network.name, 'CCRelayV2Impl', ccV2ImplAddress)
             const factory = await getFactoryContract(hre, env, signer)
             // const  = utils.getEndpoint(env, hre.network.name)
             const lzEndpointAddress = endpointV2.address
@@ -38,6 +38,39 @@ task("order:deploy", "Deploys the contract to a specific network: CrossChainRela
             throw new Error(`Contract type ${contract} not supported`)
         }
         
+    })
+
+task("quick:deploy", "Quickly deploy the contract to all supported networks: CrossChainRelayV2")
+    .addParam("env", "The environment to deploy the CrossChainRelayV2 contract", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+        const networks = utils.getNetworks(env)
+        const artifact = await hre.artifacts
+        const salt = getSalt(hre, env)
+        for (const network of networks) {
+            
+            const lzConfig = utils.getLzConfig(network)
+            const [signer, provider] = getNetworkSignerAndProvider(hre, network)
+            const factory = await getFactoryContract(hre, env, signer)
+            const ccV2Facotry = new hre.ethers.ContractFactory((await artifact.readArtifact('CrossChainRelayV2')).abi, (await artifact.readArtifact('CrossChainRelayV2')).bytecode, signer)
+            const ccV2Impl = utils.isPolygonNetwork(network) ? await ccV2Facotry.deploy({gasPrice: 30000000000}) : await ccV2Facotry.deploy()  // {gasPrice: 30000000000}
+            await ccV2Impl.deployed()
+            const ccV2ImplAddress = ccV2Impl.address
+            await utils.saveContractAddress(env, hre.network.name, 'CCRelayV2Impl', ccV2ImplAddress)
+            console.log(`deployed ccV2Impl Address on ${padString(network, 15)}: ${ccV2ImplAddress}`)
+            const endpointV2Address = lzConfig.endpointAddress
+            console.log(`endpointV2Address: ${endpointV2Address}`)
+
+            const delegate = signer.address
+            console.log(`delegate: ${delegate}`)
+            const proxyBytecode = await getCCRelayV2ProxyBytecode(hre, ccV2ImplAddress, signer, endpointV2Address, delegate)
+            const tx = utils.isPolygonNetwork(network) ? await factory.deploy(salt, proxyBytecode, {gasPrice: 30000000000}) : await factory.deploy(salt, proxyBytecode) // , {gasPrice: 30000000000}
+            const receipt = await tx.wait()
+            console.log('deployed contract proxy with tx hash:', receipt.transactionHash) 
+            console.log('relay v2 proxy address:', receipt.logs[0].address) // fix null output
+
+        }
     })
 
 task("order:getaddress", "Get the address of CrossChainRelayV2")
@@ -61,6 +94,28 @@ task("order:getaddress", "Get the address of CrossChainRelayV2")
 
     })
 
+task("quick:getaddress", "Quickly get the address of CrossChainRelayV2")
+    .addParam("env", "The environment to get address", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+          
+        const networks = utils.getNetworks(env)
+        for (const network of networks) {
+            const [signer, provider] = getNetworkSignerAndProvider(hre, network)
+            const factory = await getFactoryContract(hre, env, signer)
+            const isManager = await factory.isManager(signer.address)
+            if (!isManager) {
+                console.log(`❗ ${signer.address} is not a manager for the factory contract on ${network} ${env}`)
+            } else {
+                console.log(`✅ ${signer.address} is a manager for the factory contract on ${network} ${env}`)
+            }
+            const salt = getSalt(hre, env)
+            const predicateAddress = await factory.getDeployed(salt)
+            console.log(`Predicted address for your salt: ${predicateAddress}`)
+        }
+    })
+
 
 task("order:relayv2:set", "Connect CrossChainRelayV2 with each other between orderly chain and other chains")
     .addParam("env", "The environment to set peer", undefined, types.string)
@@ -78,6 +133,24 @@ task("order:relayv2:set", "Connect CrossChainRelayV2 with each other between ord
         await setCCManager(hre, env, network, ccRelayV2, signer)
         await setLzOption(hre, ccRelayV2, signer)
         
+    })
+
+task("quick:relayv2:set", "Quick set the CrossChainRelayV2 contract on all supported networks")
+    .addParam("env", "The environment to set", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+        const networks = utils.getNetworks(env)
+        const ccRelayV2Address = utils.getCCRelayV2Address(env)
+        for (const network of networks) {
+            console.log(`============== Setting CrossChainRelayV2 on ${padString(network, 15)} ==============`)
+            const [signer, provider] = getNetworkSignerAndProvider(hre, network)
+            const ccRelayV2 = await getContract(hre, 'CrossChainRelayV2', ccRelayV2Address, signer)
+            await setPeer(hre, env, network, ccRelayV2, signer)
+            await setChainId(hre, env, network, ccRelayV2, signer)
+            await setCCManager(hre, env, network, ccRelayV2, signer)
+            await setLzOption(hre, ccRelayV2, signer)
+        }
     })
 
 
@@ -142,10 +215,9 @@ task("order:relayv2:owner", "Set the owner of RelayV2 contract")
         const delegate = await endpointV2.delegates(ccRelayV2Address)
         console.log(`Current owner: ${owner}`)
         console.log(`Current delegate: ${delegate}`)
-        // const multiSig = utils.getMultisigAddress(env, network)
+        const multiSig = utils.getMultisigAddress(env, network)
         let nonce = await hre.ethers.provider.getTransactionCount(signer.address)
         console.log(`Nonce: ${nonce}`)
-        const multiSig = '0xD86F6E5D9F0a194E856d9BcD974886d4d1dF2769'
         if (taskArgs.setOwner) {
             const txSetDelegator = await ccRelayV2.setDelegate(multiSig, {nonce: nonce++})
             await txSetDelegator.wait()
@@ -169,10 +241,31 @@ task("order:relayv2:pingpong", "Pingpong test")
         const ccRelayV2Address = utils.getCCRelayV2Address(env)
         const ccRelayV2 = await getContract(hre, 'CrossChainRelayV2', ccRelayV2Address, signer)
         const lzConfig = utils.getLzConfig(dstNetwork)
-        const tx = await ccRelayV2.pingPong(lzConfig.chainId)
+        const tx = utils.isPolygonNetwork(network) ? await ccRelayV2.pingPong(lzConfig.chainId, {gasPrice: 30000000000}) : await ccRelayV2.pingPong(lzConfig.chainId)
         const receipt = await tx.wait()
         console.log(`Pingpong to ${dstNetwork} with tx hash: ${receipt.transactionHash}`)
         utils.getLayerZeroScanLink(receipt.transactionHash)
+    })
+
+task("quick:relayv2:pingpong", "Quick pingpong test on all supported networks")
+    .addParam("env", "The environment to pingpong", undefined, types.string)
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+        const networks = utils.getNetworks(env)
+        for (const network of networks) {
+            if (!utils.isOrderlyNetwork(network)) {
+            const [signer, provider] = getNetworkSignerAndProvider(hre, network)
+            const ccRelayV2Address = utils.getCCRelayV2Address(env)
+            const ccRelayV2 = await getContract(hre, 'CrossChainRelayV2', ccRelayV2Address, signer)
+            const orderlyLzConfig = utils.getLzConfig(utils.getOrderlyNetwork(env))
+            const tx = utils.isPolygonNetwork(network) ? await ccRelayV2.pingPong(orderlyLzConfig.chainId, {gasPrice: 30000000000}) : await ccRelayV2.pingPong(orderlyLzConfig.chainId)
+            const receipt = await tx.wait()
+            console.log(`Pingpong to ${network} with tx hash: ${receipt.transactionHash}`)
+            utils.getLayerZeroScanLink(receipt.transactionHash)
+            }
+        }
+        
     })
 
 task("lz:receive", "Receive a message on a specific network")
@@ -215,11 +308,9 @@ task("lz:nonce", "Get the nonce of relayv2 on the LayerZero endpoint")
         const padNetworkName = (str: string, len = 15) => str.toString().padEnd(len);
         const padNonce = (str: string, len = 3) => str.toString().padStart(len);
         const networks = utils.getNetworks(env)
+        const orderlyNetwork = utils.getOrderlyNetwork(env)
+        const orderlyLzConfig = utils.getLzConfig(orderlyNetwork)
         for (const vaultNetwork of networks) {
-            const orderlyNetwork = utils.getOrderlyNetwork(env)
-            const orderlyLzConfig = utils.getLzConfig(orderlyNetwork)
-            
-
             if (vaultNetwork !== orderlyNetwork) {
 
                 const [orderlySigner, orderlyProvider] = getNetworkSignerAndProvider(hre, orderlyNetwork)
@@ -233,8 +324,6 @@ task("lz:nonce", "Get the nonce of relayv2 on the LayerZero endpoint")
                 // console.log(`${orderlyNetwork}'s eid`, (await orderlyEndpointV2.eid()))
                 const vaultEndpointV2 = await hre.ethers.getContractAt(endpointV2Deployment.abi, vaultLzConfig.endpointAddress, vaultSigner)
                 // console.log(`${vaultNetwork}'s eid`, (await vaultEndpointV2.eid()))
-               
-               
                
                const vaultSentNonce = await vaultEndpointV2.outboundNonce(relayV2Address, orderlyLzConfig.endpointId, paddedRelayV2Address)
                const orderlyReceivedNonce = await orderlyEndpointV2.inboundNonce(relayV2Address, vaultLzConfig.endpointId, paddedRelayV2Address)
@@ -281,7 +370,7 @@ task("order:relayv2:nonce", "Get the nonce of the CrossChainRelayV2 contract")
         // }
     })
 
-
+    const PROXY_1967_SLOT = '0x360894A13BA1A3210667C828492DB98DCA3E2076CC3735A920A3CA505D382BBC';
 task("order:manager:upgrade", "Generate the proposal to upgrade the CCManager and set config")
     .addParam("env", "The environment to upgrade the CCManager", undefined, types.string)
     .addFlag("writeProposal", "Write the proposal to the safe tasks folder")
@@ -289,55 +378,49 @@ task("order:manager:upgrade", "Generate the proposal to upgrade the CCManager an
         const {env} = args
         utils.checkEnv(env)
         const network = hre.network.name
-        const orderlyAddresses = await utils.getOrderlyAddresses(env)
+        const orderlyAddresses = await utils.getOrderlyAddresses()
         const ccRelayV2Address = utils.getCCRelayV2Address(env)
         const [signer] = await hre.ethers.getSigners()
-        const ccManager = await getCCManagerContract(hre, env, network, signer)
-        
-        const proposalUpgrade = {
-            "_description": "Upgrade the CCManager",
-            "to": `${orderlyAddresses[env][network].CCManager}`,
-            "value": "0",
-            "method": "upgradeTo(address)",
-            "params": [`${orderlyAddresses[env][network].CCManagerImplV2}`],
-            "operation": 0
+
+        const ccManager = orderlyAddresses[env][network].CCManager
+        const implStorage = await hre.ethers.provider.getStorageAt(ccManager, PROXY_1967_SLOT);
+        const curCCManagerImpl = hre.ethers.utils.getAddress('0x' + implStorage.slice(26));
+        const CCManagerImplV2 = orderlyAddresses[env][network].CCManagerImplV2
+
+        if (curCCManagerImpl.toLowerCase() !== CCManagerImplV2.toLowerCase()) {
+            console.log(`⛔ CCManager on ${network} is not upgraded, generate proposal for upgrading CCManager...`)
+            await generateCCManagerProposal(env, network, orderlyAddresses, ccRelayV2Address, args.writeProposal)
+        } else {
+            console.log(`✅ CCManager on ${network} is already upgraded`)
+        }   
+    })
+
+task("quick:manager:upgrade", "Quickly upgrade the CCManager on all supported networks")
+    .addParam("env", "The environment to upgrade the CCManager", undefined, types.string)
+    .addFlag("writeProposal", "Write the proposal to the safe tasks folder")
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+        const ccRelayV2Address = utils.getCCRelayV2Address(env)
+
+        const networks = utils.getNetworks(env)
+        const orderlyAddresses = await utils.getOrderlyAddresses()
+        for (const network of networks) {
+            const ccManager = orderlyAddresses[env][network].CCManager
+            const CCManagerImplV2 = orderlyAddresses[env][network].CCManagerImplV2
+            const [signer, provider] = getNetworkSignerAndProvider(hre, network)
+            const implStorage = await provider.getStorageAt(ccManager, PROXY_1967_SLOT);
+            const curCCManagerImpl = ethers.utils.getAddress('0x' + implStorage.slice(26));
+
+            let proposals = []
+            if (curCCManagerImpl.toLowerCase() !== CCManagerImplV2.toLowerCase()) {
+                console.log(`⛔ CCManager on ${network} is not upgraded, generate proposal for upgrading CCManager...`)
+                await generateCCManagerProposal(env, network, orderlyAddresses, ccRelayV2Address, args.writeProposal)
+            } else {
+                console.log(`✅ CCManager on ${network} is already upgraded`)
+            }
         }
-       
-        
-        const proposalSetRelayV1Status = {
-            "_description": "Set the relay status of CrossChainRelayV1",
-            "to": `${orderlyAddresses[env][network].CCManager}`,
-            "value": "0",
-            "method": "setRelayStatus(address,bool)",
-            "params": [`${orderlyAddresses[env][network].CCRelayV1}`, true],
-            "operation": 0
-        }
-        
-        const proposalSetRelayV2Address = {
-            "_description": "Set the address of CrossChainRelayV2",
-            "to": `${orderlyAddresses[env][network].CCManager}`,
-            "value": "0",
-            "method": "setCrossChainRelayV2(address)",
-            "params": [`${ccRelayV2Address}`],
-            "operation": 0
-        }
-    
-        const proposalSetRelayV2Status = {
-            "_description": "Set the relaystatus of CrossChainRelayV2",
-            "to": `${orderlyAddresses[env][network].CCManager}`,
-            "value": "0",
-            "method": "setRelayStatus(address,bool)",
-            "params": [`${ccRelayV2Address}`, true],
-            "operation": 0
-        }        
-        
-        const proposals = [proposalUpgrade, proposalSetRelayV1Status, proposalSetRelayV2Address, proposalSetRelayV2Status]
-        console.log(JSON.stringify(proposals, null, 2))
-        const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'UPGRADE_CCMANAGER'.toUpperCase()}.json`
-        if (args.writeProposal) {
-            await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
-            console.log(`✅ Written proposal to upgrade CCManager to ${utils.PROPOSAL_FOLDER}`)
-        }
+
     })
 
 task("order:manager:relayoption", "Propose to enable CrossChainRelayV2 as the default relay")
@@ -349,90 +432,29 @@ task("order:manager:relayoption", "Propose to enable CrossChainRelayV2 as the de
         const [signer] = await hre.ethers.getSigners()
         const network = hre.network.name
         const ccManager = await getCCManagerContract(hre, env, network, signer)
+        const orderlyAddresses = await utils.getOrderlyAddresses()
+        const lzConfig = utils.getLzConfig(network)
+        await generateRelayOptionProposal(env, network, ccManager, args.writeProposal)
+        
+    })
+
+task("quick:manager:relayoption", "Quickly set the relay option to V2 for all supported networks")
+    .addParam("env", "The environment to set CrossChainRelayV2 as the default relay", undefined, types.string)
+    .addFlag("writeProposal", "Write the proposal to the safe tasks folder")
+    .setAction(async (args, hre) => {
+        const {env} = args
+        utils.checkEnv(env)
+        const ccRelayV2Address = utils.getCCRelayV2Address(env)
+        const orderlyAddresses = await utils.getOrderlyAddresses()
+        const networks = utils.getNetworks(env)
         let proposals = []
-        // set relay option for ledger network (orderly sepolia)
-        if (utils.isOrderlyNetwork(network)) {
-            const networks = utils.getNetworks(env)
-            for (const vaultNetwork of networks) {
-                if (!utils.isOrderlyNetwork(vaultNetwork)) {
-                    const lzConfig = utils.getLzConfig(vaultNetwork)
-                    const relayOption = await ccManager.ccRelayOption(lzConfig.chainId)
-                    
-                    if (relayOption !== 1) {
-                        const proposalSetRelayOption = {
-                            "_description": "Set the relay option of CrossChainRelayV2",
-                            "to": `${ccManager.address}`,
-                            "value": "0",
-                            "method": "setCCRelayOption(uint256,uint8)",
-                            "params": [lzConfig.chainId, 1],
-                            "operation": 0
-                        }
-                        proposals.push(proposalSetRelayOption)
-                    } else {
-                        console.log(`✅ Relay option to V2 to ${vaultNetwork} already set`)
-                    }
-                }
-            }
-        } 
-        // set relay option for vault networks
-        else {
-            // new logic, first check if ccManager on vault network is upgraded using try-catch pattern
-            // when upgraded: check relayOption, when relayOption !== 1, push proposal
-            // when not upgraded: print message, push proposal
-            try {
-                const relayOption = await ccManager.ccRelayOption()
-                if (relayOption !== 1) {
-                    console.log(`⛔ Relay option to V2 for ${network} is not set, generate proposal for setting relay option...`)
-                    const proposalSetRelayOption = {
-                        "_description": "Set the relay option of CrossChainRelayV2",
-                        "to": `${ccManager.address}`,
-                        "value": "0",
-                        "method": "setCCRelayOption(uint8)",
-                        "params": [1],
-                        "operation": 0
-                    } 
-                    proposals.push(proposalSetRelayOption)
-                } else {
-                    console.log(`✅ Relay option to V2 for ${network} already set`)
-                }
-            } catch (error) {
-                // only for CC V2 migration convenience: can generate proposal for relay option when CCManager not upgraded on vault networks
-                // console.log(error)
-                console.log(`⛔ CCManager on ${network} is not upgraded, generate proposal for setting relay option in advance...`)
-                console.log(`⛔ Remember to upgrade CCManager on ${network} first, before setting relay option!`)
-                const proposalSetRelayOption = {
-                    "_description": "Set the relay option of CrossChainRelayV2",
-                    "to": `${ccManager.address}`,
-                    "value": "0",
-                    "method": "setCCRelayOption(uint8)",
-                    "params": [1],
-                    "operation": 0
-                } 
-                proposals.push(proposalSetRelayOption)
-            }
+        for (const network of networks) {
+            const [signer, provider] = getNetworkSignerAndProvider(hre, network)
+            const ccManagerAddress = orderlyAddresses[env][network].CCManager
 
-            // const relayOption = await ccManager.ccRelayOption()
-            // if (relayOption !== 1) {
-            //     const proposalSetRelayOption = {
-            //         "_description": "Set the relay option of CrossChainRelayV2",
-            //         "to": `${ccManager.address}`,
-            //         "value": "0",
-            //         "method": "setCCRelayOption(uint8)",
-            //         "params": [1],
-            //         "operation": 0
-            //     }
-            //     proposals.push(proposalSetRelayOption)
-            // } else {
-            //     console.log(`✅ Relay option to V2 for ${network} already set`)
-            // }
-
-        }
-        console.log(JSON.stringify(proposals, null, 2)) 
-
-        const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'SET_RELAY_OPTION'.toUpperCase()}.json`
-        if (args.writeProposal) {
-            await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
-            console.log(`✅ Written proposal to upgrade CCManager to ${utils.PROPOSAL_FOLDER}`)
+            const ccManager = await getCCManagerContract(hre, env, network, signer)
+           
+            await generateRelayOptionProposal(env, network, ccManager, args.writeProposal)
         }
     })
 
@@ -445,7 +467,7 @@ task("order:manager:disable", "Propose to disable CrossChainRelayV1")
         const [signer] = await hre.ethers.getSigners()
         const network = hre.network.name
         const ccManager = await getCCManagerContract(hre, env, network, signer)
-        const ccRelayV1Address = (await utils.getOrderlyAddresses(env))[env][network].CCRelayV1
+        const ccRelayV1Address = (await utils.getOrderlyAddresses())[env][network].CCRelayV1
         const ccRelayV1Status = await ccManager.enabledRelays(ccRelayV1Address)
         let proposals = []
         if (ccRelayV1Status !== 0) {
@@ -521,22 +543,29 @@ async function setLzOption(hre: HardhatRuntimeEnvironment, ccRelayV2: Contract, 
     let nonce = await signer.getTransactionCount()
     const zeroValue = 0;  
     const methods = utils.getMethod()
-
+    const network = hre.network.name
+    // console.log(network)
     const methodsNames = Object.keys(methods).filter(k => isNaN(Number(k)));
     console.log(`Print all message types and its gas limit:`)
     for (const method of methodsNames) {
         const methodIndex = methods[method as keyof typeof methods]
         const gasLimit = utils.getMethodOption(methodIndex)
-        console.log(`${method}: ${gasLimit}`)
         const [gasLimitOnRelay, _] = await ccRelayV2.lzOptions(methodIndex)
-        console.log(`Gas limit on relay v2: ${gasLimitOnRelay}`)
         if (Number(gasLimitOnRelay) !== gasLimit) {
-            console.log(`❗ Gas limit on relay is not the same as the config file`)
-            const tx = await ccRelayV2.setMethodOption(methodIndex, gasLimit, zeroValue, {nonce: nonce++})
-            const receipt = await tx.wait()
-            console.log(`✅ Set gas limit on relay to ${gasLimit}: ${receipt.transactionHash}`)
+            console.log(`❗ Gas limit on relay is not the same as the const file`)
+            console.log(`Gas limit on relay v2: ${gasLimitOnRelay}`)
+            console.log(`${method} on const file: ${gasLimit}`)
+            if (network === 'amoy') {
+                const tx = await ccRelayV2.setMethodOption(methodIndex, gasLimit, zeroValue, {nonce: nonce++, gasPrice: 30_000_000_000})
+                const receipt = await tx.wait()
+                console.log(`✅ Set gas limit on relay to ${gasLimit}: ${receipt.transactionHash}`)
+            } else {
+                const tx = await ccRelayV2.setMethodOption(methodIndex, gasLimit, zeroValue, {nonce: nonce++})
+                const receipt = await tx.wait()
+                console.log(`✅ Set gas limit for on relay to ${gasLimit}: ${receipt.transactionHash}`)
+            }
         } else {
-            console.log(`✅ Gas limit on relay is the same as the config file`)
+            console.log(`✅ Gas limit on relay for ${padString(method, 20)} is the same as the config file`)
         }
     }
 }
@@ -551,7 +580,7 @@ async function getContract(hre: HardhatRuntimeEnvironment, contract: string, add
 }
 
 async function getCCManagerContract(hre: HardhatRuntimeEnvironment, env: string, network: string, signer: SignerWithAddress) {
-    const orderlyAddresses = await utils.getOrderlyAddresses(env)
+    const orderlyAddresses = await utils.getOrderlyAddresses()
     const ccManagerAddress = orderlyAddresses[env][network].CCManager
     let ccManagerAbiPath = ''
     if (utils.isOrderlyNetwork(network)) {
@@ -668,11 +697,11 @@ async function setPeer(hre: HardhatRuntimeEnvironment, env: string, network: str
                    const savedPeerAddress = await ccRelayV2.peers(lzConfig.endpointId)
                 //    console.log('savedPeerAddress', savedPeerAddress)
                    if (!samePeer(paddedPeerAddress, savedPeerAddress)) {
-                    console.log('❗ Peer is not set, setting peer to ',remoteNetwork)
+                    console.log(`❗ Peer is not set, setting peer to ${remoteNetwork}`)
                     eids.push(lzConfig.endpointId)
                     peers.push(paddedPeerAddress)
                    } else {
-                     console.log(`✅ Peer to ${remoteNetwork} already set`)
+                     console.log(`✅ Peer to ${padString(remoteNetwork, 15)} already set`)
                    }  
                 }
                 continue
@@ -692,7 +721,7 @@ async function setPeer(hre: HardhatRuntimeEnvironment, env: string, network: str
             // console.log('savedPeerAddress', savedPeerAddress)
             if (!samePeer(paddedPeerAddress, savedPeerAddress)) {
                 console.log('❗Peer not set, setting peer to orderly network')
-                const tx = await ccRelayV2.setPeer(lzConfig.endpointId, paddedPeerAddress, {nonce: nonce++})
+                const tx = utils.isPolygonNetwork(network) ? await ccRelayV2.setPeer(lzConfig.endpointId, paddedPeerAddress, {nonce: nonce++, gasPrice: 30000000000}) : await ccRelayV2.setPeer(lzConfig.endpointId, paddedPeerAddress, {nonce: nonce++})
                 const receipt = await tx.wait()
                 console.log(`✅ Set peer to ${ordderlyNetwork}: ${receipt.transactionHash}`)
             } else {
@@ -731,7 +760,7 @@ async function setChainId(hre: HardhatRuntimeEnvironment, env: string, network: 
         const savedEid = await ccRelayV2.chainId2Eid(lzConfig.chainId)
         if (savedEid !== lzConfig.endpointId) {
             console.log(`❗ EID mismatch for ${ordderlyNetwork}, setting EID`)
-            const tx = await ccRelayV2.addChainIdMapping(lzConfig.chainId, lzConfig.endpointId, {nonce: nonce++})
+            const tx = utils.isPolygonNetwork(network) ? await ccRelayV2.addChainIdMapping(lzConfig.chainId, lzConfig.endpointId, {nonce: nonce++, gasPrice: 30000000000}) : await ccRelayV2.addChainIdMapping(lzConfig.chainId, lzConfig.endpointId, {nonce: nonce++})
             const receipt = await tx.wait()
             console.log(`✅ Set ChainId and Eid to ${ordderlyNetwork}: ${receipt.transactionHash}`)
         } else {
@@ -742,7 +771,7 @@ async function setChainId(hre: HardhatRuntimeEnvironment, env: string, network: 
 }
 
 async function setCCManager(hre: HardhatRuntimeEnvironment, env: string, network: string, ccRelayV2: Contract, signer: SignerWithAddress) {
-    const orderlyAddresses = await utils.getOrderlyAddresses(env)
+    const orderlyAddresses = await utils.getOrderlyAddresses()
     // console.log('orderlyAddresses', orderlyAddresses)
     const ccManagerAddress = orderlyAddresses[env][network].CCManager
     const savedCCManagerAddress = await ccRelayV2.ccManager()
@@ -750,7 +779,7 @@ async function setCCManager(hre: HardhatRuntimeEnvironment, env: string, network
     let nonce = await signer.getTransactionCount()
     if (savedCCManagerAddress.toLowerCase() !== ccManagerAddress.toLowerCase()) {
         console.log('❗ CCManager mismatch, setting CCManager')
-        const tx = await ccRelayV2.setCCManager(ccManagerAddress, {nonce: nonce++})
+        const tx = utils.isPolygonNetwork(network) ? await ccRelayV2.setCCManager(ccManagerAddress, {nonce: nonce++, gasPrice: 30000000000}) : await ccRelayV2.setCCManager(ccManagerAddress, {nonce: nonce++})
         const receipt = await tx.wait()
         console.log(`✅ Set CCManager on ${network}: ${receipt.transactionHash}`)
     } else {
@@ -773,4 +802,159 @@ function getSalt(hre: HardhatRuntimeEnvironment, env: string) {
 
 function samePeer(paddedPeerAddress: string, savedPeerAddress: string) {
     return paddedPeerAddress.toLowerCase() === savedPeerAddress.toLowerCase()
+}
+
+function padString(str: string, len: number) {
+    return str.toString().padEnd(len);
+}
+
+
+async function generateCCManagerProposal(env: string, network: string, orderlyAddresses: any, ccRelayV2Address: string, writeProposal: boolean | false) {
+    const proposalUpgrade = {
+        "_description": "Upgrade the CCManager",
+        "_verify": `ts-node verify.ts --contract ${utils.isOrderlyNetwork(network)? "LedgerCrossChainManagerUpgradeable" : "VaultCrossChainManagerUpgradeable"} --repo evm-cross-chain --address ${orderlyAddresses[env][network].CCManagerImplV2} --network ${utils.getNetworkNameToVerify(network)} --commit v2.0.0-zenith-audit`,
+        "to": `${orderlyAddresses[env][network].CCManager}`,
+        "value": "0",
+        "method": "upgradeTo(address)",
+        "params": [`${orderlyAddresses[env][network].CCManagerImplV2}`],
+        "operation": 0
+    }
+   
+    
+    const proposalSetRelayV1Status = {
+        "_description": "Set the relay status of CrossChainRelayV1",
+        "to": `${orderlyAddresses[env][network].CCManager}`,
+        "value": "0",
+        "method": "setRelayStatus(address,bool)",
+        "params": [`${orderlyAddresses[env][network].CCRelayV1}`, true],
+        "operation": 0
+    }
+    
+    const proposalSetRelayV2Address = {
+        "_description": "Set the address of CrossChainRelayV2",
+        "_verifyRelayV2Impl": `ts-node verify.ts --contract CrossChainRelayV2 --repo cc-v2 --address ${orderlyAddresses[env][network].CCRelayV2Impl} --network sei-testnet --commit v1.0.0-zenith-audit`,
+        "_verifyRelayV2Proxy": `ts-node verify.ts --contract ERC1967Proxy --repo strategy-vault --address ${ccRelayV2Address} --network ${utils.getNetworkNameToVerify(network)} --commit v0.1.1-mainnet`,
+        "to": `${orderlyAddresses[env][network].CCManager}`,
+        "value": "0",
+        "method": "setCrossChainRelayV2(address)",
+        "params": [`${ccRelayV2Address}`],
+        "operation": 0
+    }
+
+    const proposalSetRelayV2Status = {
+        "_description": "Set the relaystatus of CrossChainRelayV2",
+        "to": `${orderlyAddresses[env][network].CCManager}`,
+        "value": "0",
+        "method": "setRelayStatus(address,bool)",
+        "params": [`${ccRelayV2Address}`, true],
+        "operation": 0
+    }
+    const proposals = [proposalUpgrade, proposalSetRelayV1Status, proposalSetRelayV2Address, proposalSetRelayV2Status]
+    // console.log(JSON.stringify(proposals, null, 2))
+    const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'UPGRADE_CCMANAGER'.toUpperCase()}.json`
+
+    if (writeProposal) {
+        await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
+        console.log(`✅ Written proposal to upgrade CCManager to ${utils.PROPOSAL_FOLDER}`)
+        utils.printSafeCommand(env, network, proposalName)    
+    } else {
+        console.log(JSON.stringify(proposals, null, 2))
+    }
+    
+}
+
+async function generateRelayOptionProposal(env: string, network: string, ccManager: Contract, writeProposal: boolean | false) {
+    
+    let proposals = []
+    // set relay option for ledger network (orderly sepolia)
+    if (utils.isOrderlyNetwork(network)) {
+        const networks = utils.getNetworks(env)
+        for (const vaultNetwork of networks) {
+            if (!utils.isOrderlyNetwork(vaultNetwork)) {
+                const lzConfig = utils.getLzConfig(vaultNetwork)
+
+                try {
+                    const relayOption = await ccManager.ccRelayOption(lzConfig.chainId)
+                
+                    if (relayOption !== 1) {
+                        console.log(`⛔ Relay option V2 to ${padString(vaultNetwork, 15)} on orderly is not set, generate proposal for setting relay option...`)
+                        const proposalSetRelayOption = {
+                            "_description": "Set the relay option of CrossChainRelayV2",
+                            "to": `${ccManager.address}`,
+                            "value": "0",
+                            "method": "setCCRelayOption(uint256,uint8)",
+                            "params": [lzConfig.chainId, 1],
+                            "operation": 0
+                        }
+                        proposals.push(proposalSetRelayOption)
+                    } else {
+                        console.log(`✅ Relay option V2 to ${padString(vaultNetwork, 15)} on orderly already set`)
+                    }
+                } catch (error) {
+                    console.log(`⛔ CCManager on ${padString(vaultNetwork, 15)} is not upgraded, generate proposal for setting relay option in advance...`)
+                    console.log(`⛔ Remember to upgrade CCManager on ${padString(vaultNetwork, 15)} first, before setting relay option!`)
+                    const proposalSetRelayOption = {
+                        "_description": "Set the relay option of CrossChainRelayV2",
+                        "to": `${ccManager.address}`,
+                        "value": "0",
+                        "method": "setCCRelayOption(uint256,uint8)",
+                        "params": [lzConfig.chainId, 1],
+                        "operation": 0
+                    }
+                    proposals.push(proposalSetRelayOption)
+                }
+                
+            }
+        }
+    } 
+    // set relay option for vault networks
+    else {
+        // new logic, first check if ccManager on vault network is upgraded using try-catch pattern
+        // when upgraded: check relayOption, when relayOption !== 1, push proposal
+        // when not upgraded: print message, push proposal
+        try {
+            const relayOption = await ccManager.ccRelayOption()
+            if (relayOption !== 1) {
+                console.log(`⛔ Relay option to V2 for ${padString(network, 15)} is not set, generate proposal for setting relay option...`)
+                const proposalSetRelayOption = {
+                    "_description": "Set the relay option of CrossChainRelayV2",
+                    "to": `${ccManager.address}`,
+                    "value": "0",
+                    "method": "setCCRelayOption(uint8)",
+                    "params": [1],
+                    "operation": 0
+                } 
+                proposals.push(proposalSetRelayOption)
+            } else {
+                console.log(`✅ Relay option V2 to orderly on ${padString(network, 15)} already set`)
+            }
+        } catch (error) {
+            // only for CC V2 migration convenience: can generate proposal for relay option when CCManager not upgraded on vault networks
+            // console.log(error)
+            console.log(`⛔ CCManager on ${padString(network, 15)} is not upgraded, generate proposal for setting relay option in advance...`)
+            console.log(`⛔ Remember to upgrade CCManager on ${padString(network, 15)} first, before setting relay option!`)
+            const proposalSetRelayOption = {
+                "_description": "Set the relay option of CrossChainRelayV2",
+                "to": `${ccManager.address}`,
+                "value": "0",
+                "method": "setCCRelayOption(uint8)",
+                "params": [1],
+                "operation": 0
+            } 
+            proposals.push(proposalSetRelayOption)
+        }
+
+    }
+    // console.log(JSON.stringify(proposals, null, 2)) 
+    
+    const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'SET_RELAY_OPTION'.toUpperCase()}.json`
+    if (writeProposal) {
+        await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
+        console.log(`✅ Written proposal to upgrade CCManager to ${utils.PROPOSAL_FOLDER}`)
+        utils.printSafeCommand(env, network, proposalName)
+    } else {
+        console.log(JSON.stringify(proposals, null, 2))
+    }
+
+    
 }

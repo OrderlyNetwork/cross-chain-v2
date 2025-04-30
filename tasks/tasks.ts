@@ -292,6 +292,41 @@ task('quick:relayv2:pingpong', 'Quick pingpong test on all supported networks')
         }
     })
 
+task('quick:relayv2:balance', 'Quickly get the balance of all CrossChainRelayV2 contracts across networks')
+    .addParam('env', 'The environment to get balance', undefined, types.string)
+    .setAction(async (args, hre) => {
+        const { env } = args
+        utils.checkEnv(env)
+        const networks = utils.getNetworks(env)
+        const ccRelayV2Address = utils.getCCRelayV2Address(env)
+
+        console.log(`======================================== CrossChainRelayV2 balance for ${env} ========================================`)
+      
+        let totalBalance = ethers.BigNumber.from(0)
+
+        for (const network of networks) {
+            const [signer, provider] = getNetworkSignerAndProvider(hre, network)
+
+            try {
+                const balance = await provider.getBalance(ccRelayV2Address)
+                const nativeSymbol = getNativeSymbol(network)
+
+                console.log(
+                    `Balance of CrossChainRelayV2 on ${padString(network, 15)} (${ccRelayV2Address}): ${ethers.utils.formatEther(balance)} ${nativeSymbol}`
+                )
+
+                // Convert all balances to a common denomination (ETH value) for simplicity
+                // This is a simplification - in reality, you might want to use price feeds
+                // totalBalance = totalBalance.add(balance)
+            } catch (error: any) {
+                console.log(`Error getting balance for ${network}: ${error.message}`)
+            }
+        }
+
+        console.log(`========================================================================================================================`)
+        // console.log(`Total balance (in native token values): ${ethers.utils.formatEther(totalBalance)}`)
+    })
+
 task('lz:receive', 'Receive a message on a specific network')
     .addParam('hash', 'The hash of the receive alert txn', undefined, types.string)
     .setAction(async (args, hre) => {
@@ -1133,4 +1168,40 @@ async function generateRelayOptionProposal(
     } else {
         console.log(JSON.stringify(proposals, null, 2))
     }
+}
+
+function getNativeSymbol(network: string): string {
+    const networkToSymbol: Record<string, string> = {
+        arbitrum: 'ETH',
+        arbitrumsepolia: 'ETH',
+        optimism: 'ETH',
+        opsepolia: 'ETH',
+        polygon: 'MATIC',
+        amoy: 'MATIC',
+        base: 'ETH',
+        basesepolia: 'ETH',
+        mantle: 'MNT',
+        mantlesepolia: 'MNT',
+        ethereum: 'ETH',
+        sepolia: 'ETH',
+        avalanche: 'AVAX',
+        fuji: 'AVAX',
+        sei: 'SEI',
+        seitestnet: 'SEI',
+        morph: 'ETH',
+        morphtestnet: 'ETH',
+        sonic: 'S',
+        sonictestnet: 'S',
+        monad: 'MON',
+        monadtestnet: 'MON',
+        // bsc: 'BNB',
+        // bsc_testnet: 'BNB',
+        orderly: 'ETH',
+        orderlysepolia: 'ETH',
+        bera: 'BERA',
+        story: 'STORY',
+        mode: 'ETH',
+    }
+
+    return networkToSymbol[network] || 'Native Token'
 }

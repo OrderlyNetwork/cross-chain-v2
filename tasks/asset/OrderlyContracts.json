@@ -1,270 +1,283 @@
 {
-    "dev": {
-        "arbitrumsepolia": {
-            "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
-            "CCManagerImplV2": "0xd599a8F0e2bb1b8bbFd14510b26431A47083e21c",
-            "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
-        },
-        "opsepolia": {
-            "CCManager": "0xE8709025f99dd1B8533FB9b78Ca879Ee4ec7E70a",
-            "CCManagerImplV2": "0x47D74C895129DdA698b4DeC826B6c80818c8F0fe",
-            "CCRelayV1": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D"
-        },
-        "amoy": {
-            "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
-        },
-        "basesepolia": {
-            "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
-        },
-        "mantlesepolia": {
-            "CCManager": "0x45f4caBF70150356Abf4072AbB6267a8F2144F2A",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D"
-        },
-        "sepolia": {
-            "CCManager": "0xfB6D8E9cA05A8B5e992bACe77BD6412E3A2AE4f4",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xA008dcab52AAbeb090F7ce6EC2C8D827865D9C9A"
-        },
-        "fuji": {
-            "CCManager": "0x6408C0222cbadAB9Afa9c85e206637208ba6C580",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xde1aB8F5C40544F3D8b500924B1da09148BaaebD"
-        },
-        "seitestnet": {
-            "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
-        },
-        "morphtestnet": {
-            "CCManager": "0x942a7735F8D059CC097472FB9708635dD6fdFB37",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x55178A65fF0d552A17097fB51Eb3760F58f30041"
-        },
-        "sonictestnet": {
-            "CCManager": "0x858113629af263CC960eC0Bd9934dE9aB2E7A704",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xDf29Fd7DFc51e428Aa22e820AF1D2B90aE22A0E9"
-        },
-        "monadtestnet": {
-            "CCManager": "0xc00ae69B6F81f08110B5B2520dF1E82709AD65aF",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xB7e90bd947Aa1679bD8ea27498c9518C9cf6FcDc"
-        },
-        "beratestnet": {
-            "CCManager": "0xB21B784e30A81e37895402e74a10088c898eC461",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xaE07b58DD6b646aDF74d7983953Ada6967C9E65D"
-        },
-        "orderlysepolia": {
-            "CCManager": "0xdecdf6f646d5cfaf16abf12222ccc84febae5934",
-            "CCManagerImplV2": "0x35b24cAC85e809a0c3761bFd7794204e7ca53cfd",
-            "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
-        }        
+  "dev": {
+    "arbitrumsepolia": {
+      "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
+      "CCManagerImplV2": "0xd599a8F0e2bb1b8bbFd14510b26431A47083e21c",
+      "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
     },
-    "qa": {
-        "arbitrumsepolia": {
-            "CCManager": "0x3D6B3c33Ef5d7EF3D300E9993bCBa84994282796",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xED0294bDE7f5aEBC1eBe4Ed16940d684D3276C89"
-        },
-        "opsepolia": {
-            "CCManager": "0xf05C5b1eE868b18c760ca81b4B4Ebd1A54b52147",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x2730d08725c2430B419D2B795d0dA98A48Eae613"
-        },
-        "amoy": {
-            "CCManager": "0x3D6B3c33Ef5d7EF3D300E9993bCBa84994282796",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xED0294bDE7f5aEBC1eBe4Ed16940d684D3276C89"
-        },
-        "basesepolia": {
-            "CCManager": "0x3D6B3c33Ef5d7EF3D300E9993bCBa84994282796",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xED0294bDE7f5aEBC1eBe4Ed16940d684D3276C89"
-        },
-        "mantlesepolia": {
-            "CCManager": "0x55F1EdC60e81486173B63121634e228ECf68D328",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x2521750f89bEb11C53a3646D45073bef33312a91"
-        },
-        "sepolia": {
-            "CCManager": "0x94843406ac2b468C54c527853246614D5B5753Ab",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xf05C5b1eE868b18c760ca81b4B4Ebd1A54b52147"
-        },
-        "fuji": {
-            "CCManager": "0x4e0F492450A67015999c9028808B73F1a677120f",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x4812F9F27dC37C0911c75618a1f5F553fC78F5Ba"
-        },
-        "seitestnet": {
-            "CCManager": "0x3D6B3c33Ef5d7EF3D300E9993bCBa84994282796",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xED0294bDE7f5aEBC1eBe4Ed16940d684D3276C89"
-        },
-        "morphtestnet": {
-            "CCManager": "0x58EC54D7298AcCe1Ecb77FC4DEf8fddeEFCD8472",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xbEe6284298fd5Bc0FC975c753ba11872b230cFf2"
-        },
-        "sonictestnet": {
-            "CCManager": "0x46cC6b810B4B391F7447Ec5615b24e60857B07bD",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xf75D79f77af49Ce4ae000e7aEb7C42161c1f2371"
-        },
-        "monadtestnet": {
-            "CCManager": "0x15A7b258a232Dda20F402949E20920F4f36740C7",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x0Ca92F8CF1Ce9fcD1207f6603a66841d46437B92"
-        },
-        "beratestnet": {
-            "CCManager": "0xA4d999e78947fd8D40bD41984a53Bf4B5597b9E8",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x6e1c16c463ee9c1eaE4E693BCEB14e866Cd131c2"
-        },
-        "orderlysepolia": {
-            "CCManager": "0x2266a110c358468e0Fcb173fE77Ce388889483e8",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xf05C5b1eE868b18c760ca81b4B4Ebd1A54b52147"
-        }        
+    "opsepolia": {
+      "CCManager": "0xE8709025f99dd1B8533FB9b78Ca879Ee4ec7E70a",
+      "CCManagerImplV2": "0x47D74C895129DdA698b4DeC826B6c80818c8F0fe",
+      "CCRelayV1": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D"
     },
-    "staging": {
-        "arbitrumsepolia": {
-            "CCManager": "0xc8E38C1Fd1422f49DB592BAe619080EA5Deb50e0",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x25eB1e506608ab7eb8f91802e1dae6963848ED25"
-        },
-        "opsepolia": {
-            "CCManager": "0x6C14bf583C142B66EC59F8fc725B255e3a94BAA3",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x09a766D6bcA1Fd8FdB6c09b76084719cF94d041b"
-        },
-        "amoy": {
-            "CCManager": "0x2F504DC60D1E56A6421b9db56eC21e8B0fcb311b",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x339c8523d4c2354E392424D76C2c3546Df2e7a13"
-        },
-        "basesepolia": {
-            "CCManager": "0xc8E38C1Fd1422f49DB592BAe619080EA5Deb50e0",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x25eB1e506608ab7eb8f91802e1dae6963848ED25"
-        },
-        "mantlesepolia": {
-            "CCManager": "0xC0031c46DB3A30245400cf3095FdFbac064063DD",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x92DD844c209Cb519Ab85C5D8b5f0e3F254A8Cdb1"
-        },
-        "sepolia": {
-            "CCManager": "0xE3a4d50b99758b5A07762B12a61F3832A63AE143",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xfD89A24390BfEBbA227c0e8BcD4447d0c3A84FC2"
-        },
-        "fuji": {
-            "CCManager": "0x7246365Db2faeC60b8EF702Ba2c8Bbd5330E06F6",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x9fA5512075be0FAa7f207aE42E02F34DE91E8256"
-        },
-        "seitestnet": {
-            "CCManager": "0xc8E38C1Fd1422f49DB592BAe619080EA5Deb50e0",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x25eB1e506608ab7eb8f91802e1dae6963848ED25"
-        },
-        "morphtestnet": {
-            "CCManager": "0x17233845f1CD96ef160E4D89Ef41c46264882F3C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x1E1fF5737Db00aaCD7822F389d8b310b4c41863C"
-        },
-        "sonictestnet": {
-            "CCManager": "0xC507f0f8B39C565092DeDE7503E0af6121d8c0fC",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xB2c025663dbE0a0B114d49EF982e1746c4c24d51"
-        },
-        "monadtestnet": {
-            "CCManager": "0xE99715DCD2044511cf7679d28cc1F9c39e5b75f8",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xf0A705f6aA750b4a7100F1ff4b154c761FC454c1"
-        },
-        "beratestnet": {
-            "CCManager": "0x37e8C37ebB829cd238A70C683De778F47520F78D",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xB6FF777729FdcC3966b93832cd690D70cFb6Cd3A"
-        },
-        "orderlysepolia": {
-            "CCManager": "0xb592011550a7E2a85c69EdF1788F460075b958fc",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0xa1a9C94bb24B09739Af80E6EfaB7ca0F576182bc"
-        }        
+    "amoy": {
+      "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
+      "CCManagerImplV2": "0x8eFD65990608B51177EE874B0629a3089B8CD79d",
+      "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
     },
-    "mainnet": {
-        "arbitrum": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "optimism": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "polygon": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "base": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "mantle": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "ethereum": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "avalanche": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "sei": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "morph": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "sonic": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "monad": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "bera": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        },
-        "orderlysepolia": {
-            "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
-            "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
-            "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
-        }        
+    "basesepolia": {
+      "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
+      "CCManagerImplV2": "0x38b48213Dd066167aFf2150Da78c7f9Db5E73c25",
+      "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
+    },
+    "mantlesepolia": {
+      "CCManager": "0x45f4caBF70150356Abf4072AbB6267a8F2144F2A",
+      "CCManagerImplV2": "0x4B1F7C447D7B7dE2F44452CA5b84Dc6E8D446608",
+      "CCRelayV1": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D"
+    },
+    "sepolia": {
+      "CCManager": "0xfB6D8E9cA05A8B5e992bACe77BD6412E3A2AE4f4",
+      "CCManagerImplV2": "0x0bA22293434A9c27F3932d8506f8f5Ed348DbcFA",
+      "CCRelayV1": "0xA008dcab52AAbeb090F7ce6EC2C8D827865D9C9A"
+    },
+    "fuji": {
+      "CCManager": "0x6408C0222cbadAB9Afa9c85e206637208ba6C580",
+      "CCManagerImplV2": "0x414882c9417ea5d1eD432427195E40cA75eb5583",
+      "CCRelayV1": "0xde1aB8F5C40544F3D8b500924B1da09148BaaebD"
+    },
+    "seitestnet": {
+      "CCManager": "0xCf474548756Eb48A14D08Ca514F728f72a8F629D",
+      "CCManagerImplV2": "0x96B0E041cE191f11F25f2f7BE180f01e24E9730c",
+      "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
+    },
+    "morphtestnet": {
+      "CCManager": "0x942a7735F8D059CC097472FB9708635dD6fdFB37",
+      "CCManagerImplV2": "0x38b48213Dd066167aFf2150Da78c7f9Db5E73c25",
+      "CCRelayV1": "0x55178A65fF0d552A17097fB51Eb3760F58f30041"
+    },
+    "sonictestnet": {
+      "CCManager": "0x858113629af263CC960eC0Bd9934dE9aB2E7A704",
+      "CCManagerImplV2": "0x38b48213Dd066167aFf2150Da78c7f9Db5E73c25",
+      "CCRelayV1": "0xDf29Fd7DFc51e428Aa22e820AF1D2B90aE22A0E9"
+    },
+    "monadtestnet": {
+      "CCManager": "0xc00ae69B6F81f08110B5B2520dF1E82709AD65aF",
+      "CCManagerImplV2": "0x596C24AdED9Ce77f3Fb487f616c1e797dBe413BA",
+      "CCRelayV1": "0xB7e90bd947Aa1679bD8ea27498c9518C9cf6FcDc"
+    },
+    "beratestnet": {
+      "CCManager": "0xB21B784e30A81e37895402e74a10088c898eC461",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0xaE07b58DD6b646aDF74d7983953Ada6967C9E65D"
+    },
+    "orderlysepolia": {
+      "CCManager": "0xdecdf6f646d5cfaf16abf12222ccc84febae5934",
+      "CCManagerImplV2": "0x35b24cAC85e809a0c3761bFd7794204e7ca53cfd",
+      "CCRelayV1": "0x0978f0A39380410b46e5dA3183eAf3160F604Bd0"
     }
+  },
+  "qa": {
+    "arbitrumsepolia": {
+      "CCManager": "0x3D6B3c33Ef5d7EF3D300E9993bCBa84994282796",
+      "CCManagerImplV2": "0xD1d7aE7c054044A2ce6E59da557cb3170D0C05cA",
+      "CCRelayV1": "0xED0294bDE7f5aEBC1eBe4Ed16940d684D3276C89"
+    },
+    "opsepolia": {
+      "CCManager": "0xf05C5b1eE868b18c760ca81b4B4Ebd1A54b52147",
+      "CCManagerImplV2": "0x35F11eCEA2B634434682b8022f65151DcF746894",
+      "CCRelayV1": "0x2730d08725c2430B419D2B795d0dA98A48Eae613"
+    },
+    "amoy": {
+      "CCManager": "0x3D6B3c33Ef5d7EF3D300E9993bCBa84994282796",
+      "CCManagerImplV2": "0x414882c9417ea5d1eD432427195E40cA75eb5583",
+      "CCRelayV1": "0xED0294bDE7f5aEBC1eBe4Ed16940d684D3276C89"
+    },
+    "basesepolia": {
+      "CCManager": "0x3D6B3c33Ef5d7EF3D300E9993bCBa84994282796",
+      "CCManagerImplV2": "0xA134b905B8B9E4F0c3e599A1BB0C56D94CC1bb11",
+      "CCRelayV1": "0xED0294bDE7f5aEBC1eBe4Ed16940d684D3276C89"
+    },
+    "mantlesepolia": {
+      "CCManager": "0x55F1EdC60e81486173B63121634e228ECf68D328",
+      "CCManagerImplV2": "0xc24A08a339832E0ebb75EA6D643be98d7dCb7E36",
+      "CCRelayV1": "0x2521750f89bEb11C53a3646D45073bef33312a91"
+    },
+    "sepolia": {
+      "CCManager": "0x94843406ac2b468C54c527853246614D5B5753Ab",
+      "CCManagerImplV2": "0x2CAE50c17CE589De525EDB9F872AF810351969Fc",
+      "CCRelayV1": "0xf05C5b1eE868b18c760ca81b4B4Ebd1A54b52147"
+    },
+    "fuji": {
+      "CCManager": "0x4e0F492450A67015999c9028808B73F1a677120f",
+      "CCManagerImplV2": "0xc24A08a339832E0ebb75EA6D643be98d7dCb7E36",
+      "CCRelayV1": "0x4812F9F27dC37C0911c75618a1f5F553fC78F5Ba"
+    },
+    "seitestnet": {
+      "CCManager": "0x3D6B3c33Ef5d7EF3D300E9993bCBa84994282796",
+      "CCManagerImplV2": "0x0bA22293434A9c27F3932d8506f8f5Ed348DbcFA",
+      "CCRelayV1": "0xED0294bDE7f5aEBC1eBe4Ed16940d684D3276C89"
+    },
+    "morphtestnet": {
+      "CCManager": "0x58EC54D7298AcCe1Ecb77FC4DEf8fddeEFCD8472",
+      "CCManagerImplV2": "0x4FD2835A9Af7939E71cd097056D31Dd1f67Af54F",
+      "CCRelayV1": "0xbEe6284298fd5Bc0FC975c753ba11872b230cFf2"
+    },
+    "sonictestnet": {
+      "CCManager": "0x46cC6b810B4B391F7447Ec5615b24e60857B07bD",
+      "CCManagerImplV2": "0xD1f16CF644516e47C12f3Ac0A08fFc5b5Fc0A2d9",
+      "CCRelayV1": "0xf75D79f77af49Ce4ae000e7aEb7C42161c1f2371"
+    },
+    "monadtestnet": {
+      "CCManager": "0x15A7b258a232Dda20F402949E20920F4f36740C7",
+      "CCManagerImplV2": "0x4FD2835A9Af7939E71cd097056D31Dd1f67Af54F",
+      "CCRelayV1": "0x0Ca92F8CF1Ce9fcD1207f6603a66841d46437B92"
+    },
+    "beratestnet": {
+      "CCManager": "0xA4d999e78947fd8D40bD41984a53Bf4B5597b9E8",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x6e1c16c463ee9c1eaE4E693BCEB14e866Cd131c2"
+    },
+    "orderlysepolia": {
+      "CCManager": "0x2266a110c358468e0Fcb173fE77Ce388889483e8",
+      "CCManagerImplV2": "0xc6B4A552CE7b09b9125F7AAA00537B31e0dD8f84",
+      "CCRelayV1": "0xf05C5b1eE868b18c760ca81b4B4Ebd1A54b52147"
+    }
+  },
+  "staging": {
+    "arbitrumsepolia": {
+      "CCManager": "0xc8E38C1Fd1422f49DB592BAe619080EA5Deb50e0",
+      "CCManagerImplV2": "0x9204bd79058F363942Cbd2ac68D77A6De0f5323A",
+      "CCRelayV1": "0x25eB1e506608ab7eb8f91802e1dae6963848ED25",
+      "CCRelayV2Impl":"0x248954a71921780fECE3926728677e3C642d9869"
+    },
+    "opsepolia": {
+      "CCManager": "0x6C14bf583C142B66EC59F8fc725B255e3a94BAA3",
+      "CCManagerImplV2": "0x2b86Ef36C7c9D5783bEe0C4097A44849A323e085",
+      "CCRelayV1": "0x09a766D6bcA1Fd8FdB6c09b76084719cF94d041b",
+      "CCRelayV2Impl":"0xC5f1DD784b0AB37a9847810f8f666Af4a3B44d22"
+    },
+    "amoy": {
+      "CCManager": "0x2F504DC60D1E56A6421b9db56eC21e8B0fcb311b",
+      "CCManagerImplV2": "0x2A405d25C85e5A07C9F7E4F222cAF5FA0B871474",
+      "CCRelayV1": "0x339c8523d4c2354E392424D76C2c3546Df2e7a13",
+      "CCRelayV2Impl":"0x9e3EE8E24aa1231B409916C8d985c76cDC4188E9"
+    },
+    "basesepolia": {
+      "CCManager": "0xc8E38C1Fd1422f49DB592BAe619080EA5Deb50e0",
+      "CCManagerImplV2": "0x7d3EaB79250DE746cF91411ae547DeB4C02C05E6",
+      "CCRelayV1": "0x25eB1e506608ab7eb8f91802e1dae6963848ED25",
+      "CCRelayV2Impl":"0xE30Ed0Df4Cf698F0f90DCF29BA2281E5c5C8f77b"
+    },
+    "mantlesepolia": {
+      "CCManager": "0xC0031c46DB3A30245400cf3095FdFbac064063DD",
+      "CCManagerImplV2": "0x9a705454d7AF4B34Be88341a23288510d49b6a31",
+      "CCRelayV1": "0x92DD844c209Cb519Ab85C5D8b5f0e3F254A8Cdb1",
+      "CCRelayV2Impl":"0xB496114A31f7F2509e4bD687af2d6054f80B49aB"
+    },
+    "sepolia": {
+      "CCManager": "0xE3a4d50b99758b5A07762B12a61F3832A63AE143",
+      "CCManagerImplV2": "0x5F9A1C02e2b1F6Fc3e9434037BFae780308D4C62",
+      "CCRelayV1": "0xfD89A24390BfEBbA227c0e8BcD4447d0c3A84FC2",
+      "CCRelayV2Impl":"0x200a10a8065468fB5dDbc27fD3d819aefcc9eaa9"
+    },
+    "fuji": {
+      "CCManager": "0x7246365Db2faeC60b8EF702Ba2c8Bbd5330E06F6",
+      "CCManagerImplV2": "0x0303D53Ac1C00Fc22D7f727b2c938C0E2B7154C5",
+      "CCRelayV1": "0x9fA5512075be0FAa7f207aE42E02F34DE91E8256",
+      "CCRelayV2Impl":"0x82Bb4Ed716E0b4a6d3f81Ff26Af075FEf06ce7A4"
+    },
+    "seitestnet": {
+      "CCManager": "0xc8E38C1Fd1422f49DB592BAe619080EA5Deb50e0",
+      "CCManagerImplV2": "0x73B6f0D1623E7C983481C2bF940FC48228256bbc",
+      "CCRelayV1": "0x25eB1e506608ab7eb8f91802e1dae6963848ED25",
+      "CCRelayV2Impl":"0xa3af66b61150dc4D12842a3aFD6EC1B6a2E2D473"
+    },
+    "morphtestnet": {
+      "CCManager": "0x17233845f1CD96ef160E4D89Ef41c46264882F3C",
+      "CCManagerImplV2": "0xa3af66b61150dc4D12842a3aFD6EC1B6a2E2D473",
+      "CCRelayV1": "0x1E1fF5737Db00aaCD7822F389d8b310b4c41863C",
+      "CCRelayV2Impl":"0xc0E96D092f42f27Bf0B6fE34f3D6cb2dE954B770"
+    },
+    "sonictestnet": {
+      "CCManager": "0xC507f0f8B39C565092DeDE7503E0af6121d8c0fC",
+      "CCManagerImplV2": "0xe2e16840FCe2BfEDc1f2e148ED2E087c25931360",
+      "CCRelayV1": "0xB2c025663dbE0a0B114d49EF982e1746c4c24d51",
+      "CCRelayV2Impl":"0xd5A93fa94B42DEDCCf5b01FF82B4Afd794FfD489"
+    },
+    "monadtestnet": {
+      "CCManager": "0xE99715DCD2044511cf7679d28cc1F9c39e5b75f8",
+      "CCManagerImplV2": "0x02996B64bf993dd37ABB9e711496813Ec74100a4",
+      "CCRelayV1": "0xf0A705f6aA750b4a7100F1ff4b154c761FC454c1",
+      "CCRelayV2Impl":"0xf2559447b5cf0b91ca0159ff72a8b2d0f52afd2f"
+    },
+    "beratestnet": {
+      "CCManager": "0x37e8C37ebB829cd238A70C683De778F47520F78D",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0xB6FF777729FdcC3966b93832cd690D70cFb6Cd3A",
+      "CCRelayV2Impl":"0x0000000000000000000000000000000000000000"
+    },
+    "orderlysepolia": {
+      "CCManager": "0xb592011550a7E2a85c69EdF1788F460075b958fc",
+      "CCManagerImplV2": "0x94a3dC6dcbe233D912A38a0c19b74f3140d562b3",
+      "CCRelayV1": "0xa1a9C94bb24B09739Af80E6EfaB7ca0F576182bc",
+      "CCRelayV2Impl":"0xe99A20BA205E588Ff2d9983a23B54F51bDcEcC08"
+    }
+  },
+  "mainnet": {
+    "arbitrum": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "optimism": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "polygon": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "base": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "mantle": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "ethereum": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "avalanche": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "sei": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "morph": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "sonic": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "monad": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "bera": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    },
+    "orderlysepolia": {
+      "CCManager": "0xa0a07a78c7d31E6f8698F48Fc9219f9a3030f38C",
+      "CCManagerImplV2": "0x0000000000000000000000000000000000000000",
+      "CCRelayV1": "0x173B47eDBeCa665125edc24C509bfE545CDA60a9"
+    }
+  }
 }

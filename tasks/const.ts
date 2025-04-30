@@ -237,18 +237,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: TestnetV2EndpointId.SEI_V2_TESTNET,
         chainId: 713715,
         sendLibConfig: {
-            sendLibAddress: '0xd682ECF100f6F4284138AA925348633B0611Ae21',      // SendUln302
+            sendLibAddress: '0xd682ECF100f6F4284138AA925348633B0611Ae21', // SendUln302
             executorConfig: {
                 executorAddress: '0x55c175DD5b039331dB251424538169D8495C18d1', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0xf49d162484290eaead7bb8c2c7e3a6f8f52e32d6'],  // DVN
+                requiredDVNs: ['0xf49d162484290eaead7bb8c2c7e3a6f8f52e32d6'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xcF1B0F4106B0324F96fEfcC31bA9498caa80701C',   // ReceiveUln302
+            receiveLibAddress: '0xcF1B0F4106B0324F96fEfcC31bA9498caa80701C', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0xf49d162484290eaead7bb8c2c7e3a6f8f52e32d6'],  // DVN
+                requiredDVNs: ['0xf49d162484290eaead7bb8c2c7e3a6f8f52e32d6'], // DVN
             },
         },
     },
@@ -257,39 +257,38 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: TestnetV2EndpointId.MORPH_V2_TESTNET,
         chainId: 2810,
         sendLibConfig: {
-            sendLibAddress: '0xd682ECF100f6F4284138AA925348633B0611Ae21',      // SendUln302
+            sendLibAddress: '0xd682ECF100f6F4284138AA925348633B0611Ae21', // SendUln302
             executorConfig: {
                 executorAddress: '0x701f3927871EfcEa1235dB722f9E608aE120d243', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0xf49d162484290eaead7bb8c2c7e3a6f8f52e32d6'],  // DVN
+                requiredDVNs: ['0xf49d162484290eaead7bb8c2c7e3a6f8f52e32d6'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xcF1B0F4106B0324F96fEfcC31bA9498caa80701C',   // ReceiveUln302
+            receiveLibAddress: '0xcF1B0F4106B0324F96fEfcC31bA9498caa80701C', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0xf49d162484290eaead7bb8c2c7e3a6f8f52e32d6'],  // DVN
+                requiredDVNs: ['0xf49d162484290eaead7bb8c2c7e3a6f8f52e32d6'], // DVN
             },
         },
-
     },
     sonictestnet: {
         endpointAddress: '0x6C7Ab2202C98C4227C5c46f1417D81144DA716Ff',
         endpointId: TestnetV2EndpointId.SONIC_V2_TESTNET,
         chainId: 57054,
         sendLibConfig: {
-            sendLibAddress: '0xd682ECF100f6F4284138AA925348633B0611Ae21',      // SendUln302
+            sendLibAddress: '0xd682ECF100f6F4284138AA925348633B0611Ae21', // SendUln302
             executorConfig: {
                 executorAddress: '0x9dB9Ca3305B48F196D18082e91cB64663b13d014', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0x88b27057a9e00c5f05dda29241027aff63f9e6e0'],  // DVN
+                requiredDVNs: ['0x88b27057a9e00c5f05dda29241027aff63f9e6e0'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xcF1B0F4106B0324F96fEfcC31bA9498caa80701C',   // ReceiveUln302
+            receiveLibAddress: '0xcF1B0F4106B0324F96fEfcC31bA9498caa80701C', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0x88b27057a9e00c5f05dda29241027aff63f9e6e0'],  // DVN
+                requiredDVNs: ['0x88b27057a9e00c5f05dda29241027aff63f9e6e0'], // DVN
             },
         },
     },
@@ -298,18 +297,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: TestnetV2EndpointId.MONAD_V2_TESTNET,
         chainId: 10143,
         sendLibConfig: {
-            sendLibAddress: '0xd682ECF100f6F4284138AA925348633B0611Ae21',      // SendUln302
+            sendLibAddress: '0xd682ECF100f6F4284138AA925348633B0611Ae21', // SendUln302
             executorConfig: {
                 executorAddress: '0x9dB9Ca3305B48F196D18082e91cB64663b13d014', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0x88b27057a9e00c5f05dda29241027aff63f9e6e0'],  // DVN
+                requiredDVNs: ['0x88b27057a9e00c5f05dda29241027aff63f9e6e0'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xcF1B0F4106B0324F96fEfcC31bA9498caa80701C',   // ReceiveUln302
+            receiveLibAddress: '0xcF1B0F4106B0324F96fEfcC31bA9498caa80701C', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0x88b27057a9e00c5f05dda29241027aff63f9e6e0'],  // DVN
+                requiredDVNs: ['0x88b27057a9e00c5f05dda29241027aff63f9e6e0'], // DVN
             },
         },
     },
@@ -420,18 +419,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: MainnetV2EndpointId.MANTLE_V2_MAINNET,
         chainId: 5000,
         sendLibConfig: {
-            sendLibAddress: '0xde19274c009A22921E3966a1Ec868cEba40A5DaC',      // SendUln302
+            sendLibAddress: '0xde19274c009A22921E3966a1Ec868cEba40A5DaC', // SendUln302
             executorConfig: {
                 executorAddress: '0x4Fc3f4A38Acd6E4cC0ccBc04B3Dd1CCAeFd7F3Cd', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0x28b6140ead70cb2fb669705b3598ffb4beaa060b'],  // DVN
+                requiredDVNs: ['0x28b6140ead70cb2fb669705b3598ffb4beaa060b'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0x8da6512De9379fBF4F09BF520Caf7a85435ed93e',   // ReceiveUln302
+            receiveLibAddress: '0x8da6512De9379fBF4F09BF520Caf7a85435ed93e', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0x28b6140ead70cb2fb669705b3598ffb4beaa060b'],  // DVN
+                requiredDVNs: ['0x28b6140ead70cb2fb669705b3598ffb4beaa060b'], // DVN
             },
         },
     },
@@ -480,18 +479,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: MainnetV2EndpointId.SEI_V2_MAINNET,
         chainId: 1329,
         sendLibConfig: {
-            sendLibAddress: '0xC39161c743D0307EB9BCc9FEF03eeb9Dc4802de7',      // SendUln302
+            sendLibAddress: '0xC39161c743D0307EB9BCc9FEF03eeb9Dc4802de7', // SendUln302
             executorConfig: {
                 executorAddress: '0xc097ab8CD7b053326DFe9fB3E3a31a0CCe3B526f', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0x6788f52439aca6bff597d3eec2dc9a44b8fee842'],  // DVN
+                requiredDVNs: ['0x6788f52439aca6bff597d3eec2dc9a44b8fee842'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043',   // ReceiveUln302
+            receiveLibAddress: '0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0x6788f52439aca6bff597d3eec2dc9a44b8fee842'],  // DVN
+                requiredDVNs: ['0x6788f52439aca6bff597d3eec2dc9a44b8fee842'], // DVN
             },
         },
     },
@@ -500,18 +499,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: MainnetV2EndpointId.MORPH_V2_MAINNET,
         chainId: 2818,
         sendLibConfig: {
-            sendLibAddress: '0xC39161c743D0307EB9BCc9FEF03eeb9Dc4802de7',      // SendUln302
+            sendLibAddress: '0xC39161c743D0307EB9BCc9FEF03eeb9Dc4802de7', // SendUln302
             executorConfig: {
                 executorAddress: '0xcCE466a522984415bC91338c232d98869193D46e', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0x6788f52439aca6bff597d3eec2dc9a44b8fee842'],  // DVN
+                requiredDVNs: ['0x6788f52439aca6bff597d3eec2dc9a44b8fee842'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043',   // ReceiveUln302
+            receiveLibAddress: '0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0x6788f52439aca6bff597d3eec2dc9a44b8fee842'],  // DVN
+                requiredDVNs: ['0x6788f52439aca6bff597d3eec2dc9a44b8fee842'], // DVN
             },
         },
     },
@@ -520,18 +519,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: MainnetV2EndpointId.SONIC_V2_MAINNET,
         chainId: 146,
         sendLibConfig: {
-            sendLibAddress: '0xC39161c743D0307EB9BCc9FEF03eeb9Dc4802de7',      // SendUln302
+            sendLibAddress: '0xC39161c743D0307EB9BCc9FEF03eeb9Dc4802de7', // SendUln302
             executorConfig: {
                 executorAddress: '0x4208D6E27538189bB48E603D6123A94b8Abe0A0b', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0x282b3386571f7f794450d5789911a9804fa346b4'],  // DVN
+                requiredDVNs: ['0x282b3386571f7f794450d5789911a9804fa346b4'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043',   // ReceiveUln302
+            receiveLibAddress: '0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0x282b3386571f7f794450d5789911a9804fa346b4'],  // DVN
+                requiredDVNs: ['0x282b3386571f7f794450d5789911a9804fa346b4'], // DVN
             },
         },
     },
@@ -540,18 +539,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: MainnetV2EndpointId.BERA_V2_MAINNET,
         chainId: 80094,
         sendLibConfig: {
-            sendLibAddress: '0xC39161c743D0307EB9BCc9FEF03eeb9Dc4802de7',      // SendUln302
+            sendLibAddress: '0xC39161c743D0307EB9BCc9FEF03eeb9Dc4802de7', // SendUln302
             executorConfig: {
                 executorAddress: '0x4208D6E27538189bB48E603D6123A94b8Abe0A0b', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0x282b3386571f7f794450d5789911a9804fa346b4'],  // DVN
+                requiredDVNs: ['0x282b3386571f7f794450d5789911a9804fa346b4'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043',   // ReceiveUln302
+            receiveLibAddress: '0xe1844c5D63a9543023008D332Bd3d2e6f1FE1043', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0x282b3386571f7f794450d5789911a9804fa346b4'],  // DVN
+                requiredDVNs: ['0x282b3386571f7f794450d5789911a9804fa346b4'], // DVN
             },
         },
     },
@@ -560,18 +559,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: MainnetV2EndpointId.STORY_V2_MAINNET,
         chainId: 1514,
         sendLibConfig: {
-            sendLibAddress: '0x2367325334447C5E1E0f1b3a6fB947b262F58312',      // SendUln302
+            sendLibAddress: '0x2367325334447C5E1E0f1b3a6fB947b262F58312', // SendUln302
             executorConfig: {
                 executorAddress: '0x41Bdb4aa4A63a5b2Efc531858d3118392B1A1C3d', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0x9c061c9a4782294eef65ef28cb88233a987f4bdd'],  // DVN
+                requiredDVNs: ['0x9c061c9a4782294eef65ef28cb88233a987f4bdd'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xc1B621b18187F74c8F6D52a6F709Dd2780C09821',   // ReceiveUln302
+            receiveLibAddress: '0xc1B621b18187F74c8F6D52a6F709Dd2780C09821', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0x9c061c9a4782294eef65ef28cb88233a987f4bdd'],  // DVN
+                requiredDVNs: ['0x9c061c9a4782294eef65ef28cb88233a987f4bdd'], // DVN
             },
         },
     },
@@ -580,18 +579,18 @@ export const LZ_CONFIGS: Record<string, LzConfig> = {
         endpointId: MainnetV2EndpointId.MODE_V2_MAINNET,
         chainId: 34443,
         sendLibConfig: {
-            sendLibAddress: '0x2367325334447C5E1E0f1b3a6fB947b262F58312',      // SendUln302
+            sendLibAddress: '0x2367325334447C5E1E0f1b3a6fB947b262F58312', // SendUln302
             executorConfig: {
                 executorAddress: '0x4208D6E27538189bB48E603D6123A94b8Abe0A0b', // LZ Executor
             },
             ulnConfig: {
-                requiredDVNs: ['0xce8358bc28dd8296ce8caf1cd2b44787abd65887'],  // DVN
+                requiredDVNs: ['0xce8358bc28dd8296ce8caf1cd2b44787abd65887'], // DVN
             },
         },
         receiveLibConfig: {
-            receiveLibAddress: '0xc1B621b18187F74c8F6D52a6F709Dd2780C09821',   // ReceiveUln302
+            receiveLibAddress: '0xc1B621b18187F74c8F6D52a6F709Dd2780C09821', // ReceiveUln302
             ulnConfig: {
-                requiredDVNs: ['0xce8358bc28dd8296ce8caf1cd2b44787abd65887'],  // DVN
+                requiredDVNs: ['0xce8358bc28dd8296ce8caf1cd2b44787abd65887'], // DVN
             },
         },
     },
@@ -642,33 +641,32 @@ export const METHOD_OPTIONS: Record<MethodOption, number> = {
     [MethodOption.Withdraw2Contract]: 500_000,
 }
 
-
 export const NETWORK_NAME_MAP_TO_VERIFY: Record<string, string> = {
-    'arbitrumsepolia': 'arbitrum-sepolia',
-    'opsepolia': 'optimism-sepolia',
-    'amoy': 'polygon-amoy',
-    'basesepolia': 'base-sepolia',
-    'mantlesepolia': 'mantle-sepolia',
-    'sepolia': 'sepolia',
-    'fuji': 'fuji',
-    'seitestnet': 'seitestnet',
-    'morphtestnet': 'morph-holesky',
-    'sonictestnet': 'sonic-testnet',
-    'monadtestnet': 'monad-testnet',
-    'orderlysepolia': 'orderlysepolia',
+    arbitrumsepolia: 'arbitrum-sepolia',
+    opsepolia: 'optimism-sepolia',
+    amoy: 'polygon-amoy',
+    basesepolia: 'base-sepolia',
+    mantlesepolia: 'mantle-sepolia',
+    sepolia: 'sepolia',
+    fuji: 'fuji',
+    seitestnet: 'seitestnet',
+    morphtestnet: 'morph-holesky',
+    sonictestnet: 'sonic-testnet',
+    monadtestnet: 'monad-testnet',
+    orderlysepolia: 'orderlysepolia',
 }
 
 export const NETWORK_NAME_MAP_TO_SAFE: Record<string, string> = {
-    'arbitrumsepolia': 'arbsepolia',
-    'opsepolia': 'opsepolia',
-    'amoy': 'amoy',
-    'basesepolia': 'basesepolia',
-    'mantlesepolia': 'mantlesepolia',
-    'sepolia': 'sepolia',
-    'fuji': 'fuji',
-    'seitestnet': 'arctic',
-    'morphtestnet': 'morphholesky',
-    'sonictestnet': 'sonictestnet',
-    'monadtestnet': 'monadtestnet',
-    'orderlysepolia': 'orderlysepolia',
+    arbitrumsepolia: 'arbsepolia',
+    opsepolia: 'opsepolia',
+    amoy: 'amoy',
+    basesepolia: 'basesepolia',
+    mantlesepolia: 'mantlesepolia',
+    sepolia: 'sepolia',
+    fuji: 'fuji',
+    seitestnet: 'arctic',
+    morphtestnet: 'morphholesky',
+    sonictestnet: 'sonictestnet',
+    monadtestnet: 'monadtestnet',
+    orderlysepolia: 'orderlysepolia',
 }

@@ -111,7 +111,7 @@ export function isLedgerRelayMethod(method: constants.MethodOption) {
 }
 
 // Get orderly contracts address
-const ORDERLY_CONTRACTS_PATH = path.join(__dirname, './asset/OrderlyContracts.json')
+const ORDERLY_CONTRACTS_PATH = './asset/OrderlyContracts.json'
 export async function getOrderlyAddresses() {
     const orderlyContractsPath = path.join(__dirname, ORDERLY_CONTRACTS_PATH)
     const orderlyAddresses = JSON.parse(fs.readFileSync(orderlyContractsPath, "utf8"));
@@ -119,8 +119,9 @@ export async function getOrderlyAddresses() {
 }
 
 export async function saveContractAddress(env: string, network: string, contractName: string, address: string) {
-    if (fs.existsSync(ORDERLY_CONTRACTS_PATH)) {
-        const data = fs.readFileSync(ORDERLY_CONTRACTS_PATH, 'utf-8');
+    const orderlyContractsPath = path.join(__dirname, ORDERLY_CONTRACTS_PATH)
+    if (fs.existsSync(orderlyContractsPath)) {
+        const data = fs.readFileSync(orderlyContractsPath, 'utf-8');
         const orderlyAddresses = JSON.parse(data);
         if (!orderlyAddresses[env]) {
             orderlyAddresses[env] = {}
@@ -129,7 +130,7 @@ export async function saveContractAddress(env: string, network: string, contract
             orderlyAddresses[env][network] = {}
         }
         orderlyAddresses[env][network][contractName] = address;
-        fs.writeFileSync(ORDERLY_CONTRACTS_PATH, JSON.stringify(orderlyAddresses, null, 2));
+        fs.writeFileSync(orderlyContractsPath, JSON.stringify(orderlyAddresses, null, 2));
         console.log(`Address of ${contractName} saved on ${env} ${network}`)
     } else {
         throw new Error("Address file not found")
@@ -155,8 +156,9 @@ export async function writeProposal(folderPath: string, proposal: any, proposalN
     const newNum = maxNum + 1;
     const prefix = `N` + newNum.toString().padStart(4, '0') + `_`
 
-      const fullPath = path.join(folderPath, prefix + proposalName);
-      fs.writeFileSync(fullPath, JSON.stringify(proposal, null, 2), 'utf-8');
+    const fullPath = path.join(folderPath, prefix + proposalName);
+    fs.writeFileSync(fullPath, JSON.stringify(proposal, null, 2), 'utf-8');
+    return prefix + proposalName
     
 }
 

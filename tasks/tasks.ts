@@ -832,7 +832,7 @@ async function generateCCManagerProposal(env: string, network: string, orderlyAd
     
     const proposalSetRelayV2Address = {
         "_description": "Set the address of CrossChainRelayV2",
-        "_verifyRelayV2Impl": `ts-node verify.ts --contract CrossChainRelayV2 --repo cc-v2 --address ${orderlyAddresses[env][network].CCRelayV2Impl} --network sei-testnet --commit v1.0.0-zenith-audit`,
+        "_verifyRelayV2Impl": `ts-node verify.ts --contract CrossChainRelayV2 --repo cc-v2 --address ${orderlyAddresses[env][network].CCRelayV2Impl} --network ${utils.getNetworkNameToVerify(network)} --commit v1.0.0-zenith-audit`,
         "_verifyRelayV2Proxy": `ts-node verify.ts --contract ERC1967Proxy --repo strategy-vault --address ${ccRelayV2Address} --network ${utils.getNetworkNameToVerify(network)} --commit v0.1.1-mainnet`,
         "to": `${orderlyAddresses[env][network].CCManager}`,
         "value": "0",
@@ -854,9 +854,9 @@ async function generateCCManagerProposal(env: string, network: string, orderlyAd
     const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'UPGRADE_CCMANAGER'.toUpperCase()}.json`
 
     if (writeProposal) {
-        await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
+        const ProposalNumber =await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
         console.log(`✅ Written proposal to upgrade CCManager to ${utils.PROPOSAL_FOLDER}`)
-        utils.printSafeCommand(env, network, proposalName)    
+        utils.printSafeCommand(env, network, ProposalNumber)    
     } else {
         console.log(JSON.stringify(proposals, null, 2))
     }
@@ -949,9 +949,9 @@ async function generateRelayOptionProposal(env: string, network: string, ccManag
     
     const proposalName = `${env === 'mainnet' ? 'PRODUCTION' : env.toUpperCase()}_${network.toUpperCase()}_${'SET_RELAY_OPTION'.toUpperCase()}.json`
     if (writeProposal) {
-        await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
+        const ProposalNumber = await utils.writeProposal(utils.PROPOSAL_FOLDER, proposals, proposalName)
         console.log(`✅ Written proposal to upgrade CCManager to ${utils.PROPOSAL_FOLDER}`)
-        utils.printSafeCommand(env, network, proposalName)
+        utils.printSafeCommand(env, network, ProposalNumber)
     } else {
         console.log(JSON.stringify(proposals, null, 2))
     }

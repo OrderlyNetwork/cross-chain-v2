@@ -6,13 +6,13 @@ export const ORDERLY_TESTNET = 'orderlysepolia'
 export const ORDERLY_MAINNET = 'orderly'
 
 export const TEST_NETWORKS = [
-    // 'arbitrumsepolia',
-    // 'opsepolia',
-    // 'amoy',
-    // 'basesepolia',
-    // 'mantlesepolia',
-    // 'sepolia',
-    // 'fuji',
+    'arbitrumsepolia',
+    'opsepolia',
+    'amoy',
+    'basesepolia',
+    'mantlesepolia',
+    'sepolia',
+    'fuji',
     'seitestnet',
     'morphtestnet',
     'sonictestnet',

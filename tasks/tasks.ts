@@ -300,8 +300,10 @@ task('quick:relayv2:balance', 'Quickly get the balance of all CrossChainRelayV2 
         const networks = utils.getNetworks(env)
         const ccRelayV2Address = utils.getCCRelayV2Address(env)
 
-        console.log(`======================================== CrossChainRelayV2 balance for ${env} ========================================`)
-      
+        console.log(
+            `======================================== CrossChainRelayV2 balance for ${env} ========================================`
+        )
+
         let totalBalance = ethers.BigNumber.from(0)
 
         for (const network of networks) {
@@ -323,7 +325,9 @@ task('quick:relayv2:balance', 'Quickly get the balance of all CrossChainRelayV2 
             }
         }
 
-        console.log(`========================================================================================================================`)
+        console.log(
+            `========================================================================================================================`
+        )
         // console.log(`Total balance (in native token values): ${ethers.utils.formatEther(totalBalance)}`)
     })
 
